@@ -8,9 +8,18 @@ import * as mapboxgl from "mapbox-gl";
 export class MapService {
   mapbox = mapboxgl as typeof mapboxgl;
   map: mapboxgl.Map;
+  initialZoom = 10;
+  initialLocation: mapboxgl.LngLatLike = [-0.134167, 51.510239];
 
   constructor() {
     this.mapbox.accessToken = environment.mapBoxToken;
+  }
+
+  flyToStart() {
+    this.map.flyTo({
+      center: this.initialLocation,
+      zoom: this.initialZoom
+    });
   }
 
   toggleSources(active) {
@@ -31,10 +40,18 @@ export class MapService {
     this.map = new mapboxgl.Map({
       container: "map",
       style: "mapbox://styles/mapbox/streets-v11",
-      zoom: 10,
-      center: [-0.134167, 51.510239]
+      zoom: this.initialZoom,
+      center: this.initialLocation
     });
+
     this.map.on('load', function () {
+      this.addControl(new mapboxgl.GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: true
+        },
+        trackUserLocation: true
+      }));
+
       this.addSource("bikes", {
         type: "geojson",
         data: "assets/bikes.geojson",
@@ -107,7 +124,7 @@ export class MapService {
           "circle-stroke-width": 1,
           "circle-stroke-color": "#fff"
         }
-      }); 
+      });
 
       // inspect a cluster on click
       this.on('click', 'clusters', function (e) {
@@ -121,7 +138,7 @@ export class MapService {
             center: features[0].geometry.coordinates,
             zoom: zoom
           });
-        }.bind(this) );
+        }.bind(this));
       });
 
       this.on('mouseenter', 'clusters', function () {

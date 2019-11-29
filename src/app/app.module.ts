@@ -21,6 +21,7 @@ import { MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatInputModule,
     FormsModule,
     AmplifyAngularModule,
     BrowserAnimationsModule,
+    MatButtonModule,
     MatSlideToggleModule
   ],
   providers: [

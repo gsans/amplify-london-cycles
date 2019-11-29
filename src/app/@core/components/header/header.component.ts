@@ -18,4 +18,8 @@ export class HeaderComponent implements OnInit {
   setMap(e: MatSlideToggleChange) {
     this.map.toggleSources(e.checked);
   }
+
+  centerMap() {
+    this.map.flyToStart();
+  }
 }
