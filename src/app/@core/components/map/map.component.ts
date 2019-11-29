@@ -8,7 +8,8 @@ import { MapService } from '@core/services/map.service';
   styleUrls: ['./map.component.css']
 })
 export class MapComponent implements OnInit {
-
+  checked = true;
+  
   constructor(private map: MapService) { }
 
   ngOnInit() {

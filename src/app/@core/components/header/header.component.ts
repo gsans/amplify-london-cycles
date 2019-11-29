@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MapService } from '@core/services/map.service';
+import { MatSlideToggleChange } from '@angular/material';
 
 @Component({
   selector: 'app-header',
@@ -6,10 +8,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
+  checked = false;
 
-  constructor() { }
+  constructor(private map: MapService) { }
 
   ngOnInit() {
   }
 
+  setMap(e: MatSlideToggleChange) {
+    this.map.toggleSources(e.checked);
+  }
 }

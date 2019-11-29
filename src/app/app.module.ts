@@ -5,6 +5,10 @@ import { AppComponent } from './app.component';
 import { AmplifyAngularModule, AmplifyService } from 'aws-amplify-angular';
 import { MapComponent } from './@core/components/map/map.component';
 import { HeaderComponent } from './@core/components/header/header.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatInputModule, MatRippleModule, MatDatepickerModule, MatNativeDateModule, MatSlideToggleModule } from '@angular/material';
+
 
 @NgModule({
   declarations: [
@@ -14,7 +18,10 @@ import { HeaderComponent } from './@core/components/header/header.component';
   ],
   imports: [
     BrowserModule,
-    AmplifyAngularModule
+    FormsModule,
+    AmplifyAngularModule,
+    BrowserAnimationsModule,
+    MatSlideToggleModule
   ],
   providers: [
     AmplifyService
