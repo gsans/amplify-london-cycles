@@ -1,0 +1,20 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-amplify-london-bikes-dev-111633-authRole",
+            "UnauthRoleArn": "arn:aws:iam::664371068953:role/amplify-amplify-london-bikes-dev-111633-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::664371068953:role/amplify-amplify-london-bikes-dev-111633-authRole",
+            "Region": "ap-northeast-1",
+            "DeploymentBucketName": "amplify-amplify-london-bikes-dev-111633-deployment",
+            "UnauthRoleName": "amplify-amplify-london-bikes-dev-111633-unauthRole",
+            "StackName": "amplify-amplify-london-bikes-dev-111633",
+            "StackId": "arn:aws:cloudformation:ap-northeast-1:664371068953:stack/amplify-amplify-london-bikes-dev-111633/a985ff40-1256-11ea-8572-0ef015a9ecfc",
+            "AmplifyAppId": "d267pc45ico5sy"
+        },
+        "categories": {
+            "auth": {
+                "amplifylondonbikes4782e71e": {}
+            }
+        }
+    }
+}

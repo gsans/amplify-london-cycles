@@ -1,0 +1,9 @@
+{
+	"auth": {
+		"amplifylondonbikes4782e71e": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": []
+		}
+	}
+}
