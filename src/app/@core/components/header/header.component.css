@@ -1,0 +1,15 @@
+.header {
+  display: flex;
+}
+.logo, .title {
+  display: inline;
+}
+.logo img {
+  height: 20px;
+  margin: 4px;
+  margin-left: 15px;
+}
+.title {
+  font-weight: bold;
+  margin: 4px;
+}
