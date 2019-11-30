@@ -1,0 +1,69 @@
+# this is an auto generated file. This will be overwritten
+query NearbyBikeStations($location: LocationInput!, $km: Int) {
+  nearbyBikeStations(location: $location, km: $km) {
+    items {
+      id
+      name
+      description
+      location {
+        lat
+        lon
+      }
+    }
+    nextToken
+  }
+}
+query GetBikePoint($id: ID!) {
+  getBikePoint(id: $id) {
+    id
+    name
+    description
+    location {
+      lat
+      lon
+    }
+  }
+}
+query ListBikePoints(
+  $filter: ModelBikePointFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listBikePoints(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      name
+      description
+      location {
+        lat
+        lon
+      }
+    }
+    nextToken
+  }
+}
+query SearchBikePoints(
+  $filter: SearchableBikePointFilterInput
+  $sort: SearchableBikePointSortInput
+  $limit: Int
+  $nextToken: String
+) {
+  searchBikePoints(
+    filter: $filter
+    sort: $sort
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      name
+      description
+      location {
+        lat
+        lon
+      }
+    }
+    nextToken
+    total
+  }
+}

@@ -1,0 +1,43 @@
+# this is an auto generated file. This will be overwritten
+mutation CreateBikePoint(
+  $input: CreateBikePointInput!
+  $condition: ModelBikePointConditionInput
+) {
+  createBikePoint(input: $input, condition: $condition) {
+    id
+    name
+    description
+    location {
+      lat
+      lon
+    }
+  }
+}
+mutation UpdateBikePoint(
+  $input: UpdateBikePointInput!
+  $condition: ModelBikePointConditionInput
+) {
+  updateBikePoint(input: $input, condition: $condition) {
+    id
+    name
+    description
+    location {
+      lat
+      lon
+    }
+  }
+}
+mutation DeleteBikePoint(
+  $input: DeleteBikePointInput!
+  $condition: ModelBikePointConditionInput
+) {
+  deleteBikePoint(input: $input, condition: $condition) {
+    id
+    name
+    description
+    location {
+      lat
+      lon
+    }
+  }
+}

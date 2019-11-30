@@ -1,0 +1,21 @@
+type BikePoint @model @searchable {
+  id: ID!
+  name: String!
+  description: String
+  location: Location
+}
+type Location {
+  lat: Float
+  lon: Float
+}
+input LocationInput {
+  lat: Float
+  lon: Float
+}
+type Query {
+  nearbyBikeStations(location: LocationInput!, km: Int): ModelBikePointConnection
+}
+type ModelBikePointConnection {
+	items: [BikePoint]
+	nextToken: String
+}

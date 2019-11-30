@@ -1,0 +1,34 @@
+# this is an auto generated file. This will be overwritten
+subscription OnCreateBikePoint {
+  onCreateBikePoint {
+    id
+    name
+    description
+    location {
+      lat
+      lon
+    }
+  }
+}
+subscription OnUpdateBikePoint {
+  onUpdateBikePoint {
+    id
+    name
+    description
+    location {
+      lat
+      lon
+    }
+  }
+}
+subscription OnDeleteBikePoint {
+  onDeleteBikePoint {
+    id
+    name
+    description
+    location {
+      lat
+      lon
+    }
+  }
+}
