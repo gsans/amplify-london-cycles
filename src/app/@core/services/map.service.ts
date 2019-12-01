@@ -250,7 +250,8 @@ export class MapService {
 
     this.map.on('click', 'point', (e) => {
       debugger;
-      var coordinates = e.features[0].geometry.coordinates.slice(); //coordinates to bbox
+      const g: any = e.features[0].geometry;
+      var coordinates = g.coordinates.slice();
       var description = e.features[0].properties.description;
        
       while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
