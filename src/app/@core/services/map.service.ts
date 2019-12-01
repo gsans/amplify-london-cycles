@@ -3,6 +3,11 @@ import { environment } from "@env/environment";
 import * as mapboxgl from "mapbox-gl";
 import * as MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import data from "../../../assets/data.js";
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {Observable} from 'rxjs/Observable';
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+};
 
 @Injectable({
   providedIn: "root"
@@ -16,8 +21,36 @@ export class MapService {
   userLocation: mapboxgl.LngLatLike;
   dataSearchRadius: any = this.createGeoJSONCircle([-0.134167, 51.510239], 1, 64);
 
-  constructor() {
+  popupHtml = `<strong>Loading</strong>`;
+
+  constructor(private http:HttpClient) {
     this.mapbox.accessToken = environment.mapBoxToken;
+  }
+
+  renderPopup(bike) {
+    if (!bike) {
+      return `<strong>Loading</strong>`;
+    }
+    this.popupHtml = `
+      <strong>${bike.name}</strong>
+      <div class="bike-point">${bike.NbBikes}</div>
+    `;
+  }
+
+  getBikePoint(bikePoint, coordinates) {
+    this.http.get<any>(`https://api.tfl.gov.uk/BikePoint/${bikePoint.id}`).subscribe(
+      data => {
+        bikePoint.NbBikes = data.additionalProperties[6].value;
+        bikePoint.NbEmptyDocks = data.additionalProperties[7].value;
+        bikePoint.NbDocks = data.additionalProperties[8].value;
+        this.renderPopup(bikePoint);
+        new mapboxgl.Popup()
+          .setLngLat(coordinates)
+          .setHTML(this.popupHtml)
+          .addTo(this.map);
+      },
+      err => console.error(err)
+    );
   }
 
   flyToStart() {
@@ -249,7 +282,6 @@ export class MapService {
     }));
 
     this.map.on('click', 'point', (e) => {
-      debugger;
       const g: any = e.features[0].geometry;
       var coordinates = g.coordinates.slice();
       var description = e.features[0].properties.description;
@@ -257,11 +289,7 @@ export class MapService {
       while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
       }
-       
-      new mapboxgl.Popup()
-        .setLngLat(coordinates)
-        .setHTML(`<strong>Truckeroo</strong><p><a href="http://www.truckeroodc.com/www/" target="_blank">Truckeroo</a> brings dozens of food trucks, live music, and games to half and M Street SE (across from Navy Yard Metro Station) today from 11:00 a.m. to 11:00 p.m.</p>`)
-        .addTo(this.map);
+      this.getBikePoint(e.features[0].properties, coordinates);
     });
 
     this.map.on('mouseenter', 'point', () => {
