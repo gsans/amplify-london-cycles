@@ -22,4 +22,8 @@ export class HeaderComponent implements OnInit {
   centerMap() {
     this.map.flyToStart();
   }
+
+  showSearchRadius() {
+    this.map.showSearchRadius();
+  }
 }

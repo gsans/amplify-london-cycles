@@ -1,8 +1,10 @@
 .header {
   display: flex;
+  height: 50px;
 }
 .logo, .title {
   display: inline;
+  align-self: center;
 }
 .logo img {
   height: 20px;
@@ -12,4 +14,11 @@
 .title {
   font-weight: bold;
   margin: 4px;
+}
+.toolbar {
+  align-self: center;
+  padding-left: 10px;
+}
+.toolbar button, .toolbar mat-slide-toggle {
+  margin-left: 10px;
 }

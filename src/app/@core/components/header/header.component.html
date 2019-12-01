@@ -4,6 +4,7 @@
   </div>
   <div class="title">London Bikes</div>
   <div class="toolbar">
+    <button mat-flat-button color="primary" (click)="showSearchRadius()">Search</button>
     <button mat-flat-button color="primary" (click)="centerMap()">Center</button>
     <mat-slide-toggle (change)="setMap($event)"></mat-slide-toggle>    
   </div>
