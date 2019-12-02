@@ -198,6 +198,7 @@ export type NearbyBikeStationsQuery = {
       lon: number | null;
     } | null;
   } | null> | null;
+  total: number | null;
   nextToken: string | null;
 };
 
@@ -226,6 +227,7 @@ export type ListBikePointsQuery = {
       lon: number | null;
     } | null;
   } | null> | null;
+  total: number | null;
   nextToken: string | null;
 };
 
@@ -388,6 +390,7 @@ export class APIService {
               lon
             }
           }
+          total
           nextToken
         }
       }`;
@@ -443,6 +446,7 @@ export class APIService {
               lon
             }
           }
+          total
           nextToken
         }
       }`;

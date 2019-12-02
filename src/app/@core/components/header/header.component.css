@@ -5,6 +5,7 @@
 .logo, .title {
   display: inline;
   align-self: center;
+  margin-top: 4px;
 }
 .logo img {
   height: 20px;

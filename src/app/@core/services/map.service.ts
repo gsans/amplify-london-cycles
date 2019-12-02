@@ -8,6 +8,7 @@ import {Observable} from 'rxjs/Observable';
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: "root"
@@ -33,16 +34,20 @@ export class MapService {
     }
     this.popupHtml = `
       <strong>${bike.name}</strong>
-      <div class="bike-point">${bike.NbBikes}</div>
+      <div class="bike-point">
+        <span title="${bike.lastUpdate}">${bike.NbBikes}</span> bikes available.
+      </div>
     `;
   }
+  //https://api.tfl.gov.uk/BikePoint?app_id=2222&app_key=abcd 10”
 
   getBikePoint(bikePoint, coordinates) {
-    this.http.get<any>(`https://api.tfl.gov.uk/BikePoint/${bikePoint.id}`).subscribe(
+    this.http.get<any>(`https://api.tfl.gov.uk/bikepoint/${bikePoint.id}?app_id=db79ada0&app_key=3a32a597715d22e21e5ca3d99c989e6c`).subscribe(
       data => {
         bikePoint.NbBikes = data.additionalProperties[6].value;
         bikePoint.NbEmptyDocks = data.additionalProperties[7].value;
         bikePoint.NbDocks = data.additionalProperties[8].value;
+        bikePoint.lastUpdate = moment.utc(data.additionalProperties[6].modified).startOf('hour').fromNow();
         this.renderPopup(bikePoint);
         new mapboxgl.Popup()
           .setLngLat(coordinates)
@@ -281,6 +286,10 @@ export class MapService {
       mapboxgl: this.mapbox
     }));
 
+    this.addPopupMouseEvents();
+  }
+
+  addPopupMouseEvents() {
     this.map.on('click', 'point', (e) => {
       const g: any = e.features[0].geometry;
       var coordinates = g.coordinates.slice();
@@ -297,6 +306,26 @@ export class MapService {
     });
 
     this.map.on('mouseleave', 'point', () => {
+      this.map.getCanvas().style.cursor = '';
+    });
+
+    //unclustered-point
+    this.map.on('click', 'unclustered-point', (e) => {
+      const g: any = e.features[0].geometry;
+      var coordinates = g.coordinates.slice();
+      var description = e.features[0].properties.description;
+       
+      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+      }
+      this.getBikePoint(e.features[0].properties, coordinates);
+    });
+
+    this.map.on('mouseenter', 'unclustered-point', () => {
+      this.map.getCanvas().style.cursor = 'pointer';
+    });
+
+    this.map.on('mouseleave', 'unclustered-point', () => {
       this.map.getCanvas().style.cursor = '';
     });
   }
