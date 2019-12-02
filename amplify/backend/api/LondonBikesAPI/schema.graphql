@@ -3,6 +3,7 @@ type BikePoint @model @searchable {
   name: String!
   description: String
   location: Location
+  bikes: Int
 }
 type Location {
   lat: Float
@@ -13,9 +14,10 @@ input LocationInput {
   lon: Float
 }
 type Query {
-  nearbyBikeStations(location: LocationInput!, km: Int): ModelBikePointConnection
+  nearbyBikeStations(location: LocationInput!, m: Int): ModelBikePointConnection
 }
 type ModelBikePointConnection {
 	items: [BikePoint]
+  total: Int
 	nextToken: String
 }

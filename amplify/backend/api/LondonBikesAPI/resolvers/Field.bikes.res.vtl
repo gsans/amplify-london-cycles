@@ -1,0 +1,10 @@
+#set($body = $util.parseJson($ctx.result.body))
+#if($ctx.error)
+  $util.error($ctx.error.message, $ctx.error.type)
+#end
+#if($ctx.result.statusCode == 200)
+  $body.additionalProperties[6].value
+#else
+  #* Return null *#
+  #return
+#end

@@ -2,13 +2,15 @@
 ## Objects of type BikePoint will be stored in the /bikepoint index
 
 #set( $indexPath = "/bikepoint/doc/_search" )
-#set( $distance = $util.defaultIfNull($ctx.args.km, 200) )
+#set( $distance = $util.defaultIfNull($ctx.args.m, 500) )
 {
   "version": "2017-02-28",
   "operation": "GET",
   "path": "$indexPath.toLowerCase()",
   "params": {
     "body": {
+      "from" : 0, 
+      "size" : 10,
       "query": {
         "bool" : {
           "must" : {
@@ -16,7 +18,7 @@
           },
           "filter" : {
             "geo_distance" : {
-              "distance" : "${distance}km",
+              "distance" : "${distance}m",
               "location" : $util.toJson($ctx.args.location)
             }
           }
