@@ -7,7 +7,7 @@
 		}
 	},
 	"api": {
-		"LondonBikesAPI": {
+		"TransportForLondonAPI": {
 			"service": "AppSync",
 			"providerPlugin": "awscloudformation",
 			"output": {
@@ -17,7 +17,7 @@
 						"authenticationType": "API_KEY",
 						"apiKeyConfig": {
 							"description": "",
-							"apiKeyExpirationDays": "365"
+							"apiKeyExpirationDays": "180"
 						}
 					}
 				}

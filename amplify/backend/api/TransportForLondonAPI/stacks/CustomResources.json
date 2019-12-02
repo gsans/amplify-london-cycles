@@ -77,11 +77,11 @@
         "Name": "TransportForLondonAPI",
         "Type": "HTTP",
         "HttpConfig": {
-          "EndPoint": "https://api.tfl.gov.uk"
+          "Endpoint": "https://api.tfl.gov.uk/"
         }
       }
     },
-    "FieldBikes": {
+    "BikePointBikes": {
       "Type": "AWS::AppSync::Resolver",
       "Properties": {
         "ApiId": {
@@ -92,7 +92,7 @@
         "FieldName": "bikes",
         "RequestMappingTemplateS3Location": {
           "Fn::Sub": [
-            "s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/Field.bikes.req.vtl",
+            "s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/BikePoint.bikes.req.vtl",
             {
               "S3DeploymentBucket": {
                 "Ref": "S3DeploymentBucket"
@@ -105,7 +105,7 @@
         },
         "ResponseMappingTemplateS3Location": {
           "Fn::Sub": [
-            "s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/Field.bikes.res.vtl",
+            "s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/BikePoint.bikes.res.vtl",
             {
               "S3DeploymentBucket": {
                 "Ref": "S3DeploymentBucket"

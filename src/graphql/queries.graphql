@@ -1,6 +1,6 @@
 # this is an auto generated file. This will be overwritten
-query NearbyBikeStations($location: LocationInput!, $km: Int) {
-  nearbyBikeStations(location: $location, km: $km) {
+query NearbyBikeStations($location: LocationInput!, $m: Int) {
+  nearbyBikeStations(location: $location, m: $m) {
     items {
       id
       name
@@ -9,6 +9,7 @@ query NearbyBikeStations($location: LocationInput!, $km: Int) {
         lat
         lon
       }
+      bikes
     }
     total
     nextToken
@@ -23,6 +24,7 @@ query GetBikePoint($id: ID!) {
       lat
       lon
     }
+    bikes
   }
 }
 query ListBikePoints(
@@ -39,6 +41,7 @@ query ListBikePoints(
         lat
         lon
       }
+      bikes
     }
     total
     nextToken
@@ -64,6 +67,7 @@ query SearchBikePoints(
         lat
         lon
       }
+      bikes
     }
     nextToken
     total

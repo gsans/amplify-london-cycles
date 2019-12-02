@@ -10,6 +10,7 @@ export type CreateBikePointInput = {
   name: string;
   description?: string | null;
   location?: LocationInput | null;
+  bikes?: number | null;
 };
 
 export type LocationInput = {
@@ -20,6 +21,7 @@ export type LocationInput = {
 export type ModelBikePointConditionInput = {
   name?: ModelStringInput | null;
   description?: ModelStringInput | null;
+  bikes?: ModelIntInput | null;
   and?: Array<ModelBikePointConditionInput | null> | null;
   or?: Array<ModelBikePointConditionInput | null> | null;
   not?: ModelBikePointConditionInput | null;
@@ -64,11 +66,24 @@ export type ModelSizeInput = {
   between?: Array<number | null> | null;
 };
 
+export type ModelIntInput = {
+  ne?: number | null;
+  eq?: number | null;
+  le?: number | null;
+  lt?: number | null;
+  ge?: number | null;
+  gt?: number | null;
+  between?: Array<number | null> | null;
+  attributeExists?: boolean | null;
+  attributeType?: ModelAttributeTypes | null;
+};
+
 export type UpdateBikePointInput = {
   id: string;
   name?: string | null;
   description?: string | null;
   location?: LocationInput | null;
+  bikes?: number | null;
 };
 
 export type DeleteBikePointInput = {
@@ -79,6 +94,7 @@ export type ModelBikePointFilterInput = {
   id?: ModelIDInput | null;
   name?: ModelStringInput | null;
   description?: ModelStringInput | null;
+  bikes?: ModelIntInput | null;
   and?: Array<ModelBikePointFilterInput | null> | null;
   or?: Array<ModelBikePointFilterInput | null> | null;
   not?: ModelBikePointFilterInput | null;
@@ -104,6 +120,7 @@ export type SearchableBikePointFilterInput = {
   id?: SearchableIDFilterInput | null;
   name?: SearchableStringFilterInput | null;
   description?: SearchableStringFilterInput | null;
+  bikes?: SearchableIntFilterInput | null;
   and?: Array<SearchableBikePointFilterInput | null> | null;
   or?: Array<SearchableBikePointFilterInput | null> | null;
   not?: SearchableBikePointFilterInput | null;
@@ -133,6 +150,16 @@ export type SearchableStringFilterInput = {
   regexp?: string | null;
 };
 
+export type SearchableIntFilterInput = {
+  ne?: number | null;
+  gt?: number | null;
+  lt?: number | null;
+  gte?: number | null;
+  lte?: number | null;
+  eq?: number | null;
+  range?: Array<number | null> | null;
+};
+
 export type SearchableBikePointSortInput = {
   field?: SearchableBikePointSortableFields | null;
   direction?: SearchableSortDirection | null;
@@ -141,7 +168,8 @@ export type SearchableBikePointSortInput = {
 export enum SearchableBikePointSortableFields {
   id = "id",
   name = "name",
-  description = "description"
+  description = "description",
+  bikes = "bikes"
 }
 
 export enum SearchableSortDirection {
@@ -159,6 +187,7 @@ export type CreateBikePointMutation = {
     lat: number | null;
     lon: number | null;
   } | null;
+  bikes: number | null;
 };
 
 export type UpdateBikePointMutation = {
@@ -171,6 +200,7 @@ export type UpdateBikePointMutation = {
     lat: number | null;
     lon: number | null;
   } | null;
+  bikes: number | null;
 };
 
 export type DeleteBikePointMutation = {
@@ -183,6 +213,7 @@ export type DeleteBikePointMutation = {
     lat: number | null;
     lon: number | null;
   } | null;
+  bikes: number | null;
 };
 
 export type NearbyBikeStationsQuery = {
@@ -197,6 +228,7 @@ export type NearbyBikeStationsQuery = {
       lat: number | null;
       lon: number | null;
     } | null;
+    bikes: number | null;
   } | null> | null;
   total: number | null;
   nextToken: string | null;
@@ -212,6 +244,7 @@ export type GetBikePointQuery = {
     lat: number | null;
     lon: number | null;
   } | null;
+  bikes: number | null;
 };
 
 export type ListBikePointsQuery = {
@@ -226,6 +259,7 @@ export type ListBikePointsQuery = {
       lat: number | null;
       lon: number | null;
     } | null;
+    bikes: number | null;
   } | null> | null;
   total: number | null;
   nextToken: string | null;
@@ -243,6 +277,7 @@ export type SearchBikePointsQuery = {
       lat: number | null;
       lon: number | null;
     } | null;
+    bikes: number | null;
   } | null> | null;
   nextToken: string | null;
   total: number | null;
@@ -258,6 +293,7 @@ export type OnCreateBikePointSubscription = {
     lat: number | null;
     lon: number | null;
   } | null;
+  bikes: number | null;
 };
 
 export type OnUpdateBikePointSubscription = {
@@ -270,6 +306,7 @@ export type OnUpdateBikePointSubscription = {
     lat: number | null;
     lon: number | null;
   } | null;
+  bikes: number | null;
 };
 
 export type OnDeleteBikePointSubscription = {
@@ -282,6 +319,7 @@ export type OnDeleteBikePointSubscription = {
     lat: number | null;
     lon: number | null;
   } | null;
+  bikes: number | null;
 };
 
 @Injectable({
@@ -303,6 +341,7 @@ export class APIService {
             lat
             lon
           }
+          bikes
         }
       }`;
     const gqlAPIServiceArguments: any = {
@@ -331,6 +370,7 @@ export class APIService {
             lat
             lon
           }
+          bikes
         }
       }`;
     const gqlAPIServiceArguments: any = {
@@ -359,6 +399,7 @@ export class APIService {
             lat
             lon
           }
+          bikes
         }
       }`;
     const gqlAPIServiceArguments: any = {
@@ -374,10 +415,10 @@ export class APIService {
   }
   async NearbyBikeStations(
     location: LocationInput,
-    km?: number
+    m?: number
   ): Promise<NearbyBikeStationsQuery> {
-    const statement = `query NearbyBikeStations($location: LocationInput!, $km: Int) {
-        nearbyBikeStations(location: $location, km: $km) {
+    const statement = `query NearbyBikeStations($location: LocationInput!, $m: Int) {
+        nearbyBikeStations(location: $location, m: $m) {
           __typename
           items {
             __typename
@@ -389,6 +430,7 @@ export class APIService {
               lat
               lon
             }
+            bikes
           }
           total
           nextToken
@@ -397,8 +439,8 @@ export class APIService {
     const gqlAPIServiceArguments: any = {
       location
     };
-    if (km) {
-      gqlAPIServiceArguments.km = km;
+    if (m) {
+      gqlAPIServiceArguments.m = m;
     }
     const response = (await API.graphql(
       graphqlOperation(statement, gqlAPIServiceArguments)
@@ -417,6 +459,7 @@ export class APIService {
             lat
             lon
           }
+          bikes
         }
       }`;
     const gqlAPIServiceArguments: any = {
@@ -445,6 +488,7 @@ export class APIService {
               lat
               lon
             }
+            bikes
           }
           total
           nextToken
@@ -484,6 +528,7 @@ export class APIService {
               lat
               lon
             }
+            bikes
           }
           nextToken
           total
@@ -522,6 +567,7 @@ export class APIService {
             lat
             lon
           }
+          bikes
         }
       }`
     )
@@ -542,6 +588,7 @@ export class APIService {
             lat
             lon
           }
+          bikes
         }
       }`
     )
@@ -562,6 +609,7 @@ export class APIService {
             lat
             lon
           }
+          bikes
         }
       }`
     )

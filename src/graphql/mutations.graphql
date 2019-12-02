@@ -11,6 +11,7 @@ mutation CreateBikePoint(
       lat
       lon
     }
+    bikes
   }
 }
 mutation UpdateBikePoint(
@@ -25,6 +26,7 @@ mutation UpdateBikePoint(
       lat
       lon
     }
+    bikes
   }
 }
 mutation DeleteBikePoint(
@@ -39,5 +41,6 @@ mutation DeleteBikePoint(
       lat
       lon
     }
+    bikes
   }
 }
