@@ -20,7 +20,7 @@ export class MapService {
   initialZoom = 10;
   initialLocation: mapboxgl.LngLatLike = [-0.134167, 51.510239];
   userLocation: mapboxgl.LngLatLike;
-  dataSearchRadius: any = this.createGeoJSONCircle([-0.134167, 51.510239], 1, 64);
+  dataSearchRadius: any = this.createGeoJSONCircle([-0.134167, 51.510239], 0.5, 64);
 
   popupHtml = `<strong>Loading</strong>`;
 
@@ -66,7 +66,7 @@ export class MapService {
   }
 
   showSearchRadius() {
-    this.dataSearchRadius = this.createGeoJSONCircle(this.userLocation || this.initialLocation, 1, 64);
+    this.dataSearchRadius = this.createGeoJSONCircle(this.userLocation || this.initialLocation, 0.5, 64);
     this.map.jumpTo({ 'center': this.userLocation, 'zoom': 14 });
     if (this.map.getLayer('polygon')) {
       this.map.removeLayer('polygon');

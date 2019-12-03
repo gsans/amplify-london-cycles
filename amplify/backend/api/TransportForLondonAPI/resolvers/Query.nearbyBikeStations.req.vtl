@@ -23,7 +23,15 @@
             }
           }
         }
-      }
+      },
+      "sort": [{
+        "_geo_distance": {
+          "location": $util.toJson($ctx.args.location),
+          "order": "asc",
+          "unit": "m",
+          "distance_type": "arc"
+        }
+      }]
     }
   }
 }
