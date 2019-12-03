@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MapService } from '@core/services/map.service';
-import { MatSlideToggleChange } from '@angular/material';
+import { MatSlideToggleChange, MatSliderChange } from '@angular/material';
 
 @Component({
   selector: 'app-header',
@@ -17,6 +17,10 @@ export class HeaderComponent implements OnInit {
 
   setMap(e: MatSlideToggleChange) {
     this.map.toggleSources(e.checked);
+  }
+
+  setPersons(e: MatSliderChange) {
+    this.map.setPersons(e.value);
   }
 
   centerMap() {
