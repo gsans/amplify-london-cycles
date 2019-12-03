@@ -415,10 +415,11 @@ export class APIService {
   }
   async NearbyBikeStations(
     location: LocationInput,
-    m?: number
+    m?: number,
+    limit?: number
   ): Promise<NearbyBikeStationsQuery> {
-    const statement = `query NearbyBikeStations($location: LocationInput!, $m: Int) {
-        nearbyBikeStations(location: $location, m: $m) {
+    const statement = `query NearbyBikeStations($location: LocationInput!, $m: Int, $limit: Int) {
+        nearbyBikeStations(location: $location, m: $m, limit: $limit) {
           __typename
           items {
             __typename
@@ -441,6 +442,9 @@ export class APIService {
     };
     if (m) {
       gqlAPIServiceArguments.m = m;
+    }
+    if (limit) {
+      gqlAPIServiceArguments.limit = limit;
     }
     const response = (await API.graphql(
       graphqlOperation(statement, gqlAPIServiceArguments)

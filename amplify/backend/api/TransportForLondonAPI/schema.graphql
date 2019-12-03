@@ -14,7 +14,7 @@ input LocationInput {
   lon: Float
 }
 type Query {
-  nearbyBikeStations(location: LocationInput!, m: Int): ModelBikePointConnection
+  nearbyBikeStations(location: LocationInput!, m: Int, limit: Int): ModelBikePointConnection
 }
 type ModelBikePointConnection {
 	items: [BikePoint]

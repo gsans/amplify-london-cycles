@@ -3,6 +3,7 @@
 
 #set( $indexPath = "/bikepoint/doc/_search" )
 #set( $distance = $util.defaultIfNull($ctx.args.m, 500) )
+#set( $limit = $util.defaultIfNull($ctx.args.limit, 10) )
 {
   "version": "2017-02-28",
   "operation": "GET",
@@ -10,7 +11,7 @@
   "params": {
     "body": {
       "from" : 0, 
-      "size" : 10,
+      "size" : ${limit},
       "query": {
         "bool" : {
           "must" : {

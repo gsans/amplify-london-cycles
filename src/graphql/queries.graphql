@@ -1,6 +1,6 @@
 # this is an auto generated file. This will be overwritten
-query NearbyBikeStations($location: LocationInput!, $m: Int) {
-  nearbyBikeStations(location: $location, m: $m) {
+query NearbyBikeStations($location: LocationInput!, $m: Int, $limit: Int) {
+  nearbyBikeStations(location: $location, m: $m, limit: $limit) {
     items {
       id
       name
