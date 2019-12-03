@@ -7,8 +7,7 @@ import { MapComponent } from './@core/components/map/map.component';
 import { HeaderComponent } from './@core/components/header/header.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
-import { MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatInputModule, MatRippleModule, MatDatepickerModule, MatNativeDateModule, MatSlideToggleModule } from '@angular/material';
-import { HttpClientModule } from '@angular/common/http'; 
+import { MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatInputModule, MatRippleModule, MatDatepickerModule, MatNativeDateModule, MatSlideToggleModule, MatSliderModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -23,7 +22,7 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserAnimationsModule,
     MatButtonModule,
     MatSlideToggleModule,
-    HttpClientModule
+    MatSliderModule,
   ],
   providers: [
     AmplifyService

@@ -3,12 +3,8 @@ import { environment } from "@env/environment";
 import * as mapboxgl from "mapbox-gl";
 import * as MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import data from "../../../assets/data.js";
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import {Observable} from 'rxjs/Observable';
-const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-};
 import * as moment from 'moment';
+import { APIService } from '../../API.service';
 
 @Injectable({
   providedIn: "root"
@@ -17,14 +13,17 @@ export class MapService {
   mapbox = mapboxgl as typeof mapboxgl;
   map: mapboxgl.Map;
   geolocate;
-  initialZoom = 10;
+  initialZoom = 14;
   initialLocation: mapboxgl.LngLatLike = [-0.134167, 51.510239];
   userLocation: mapboxgl.LngLatLike;
   dataSearchRadius: any = this.createGeoJSONCircle([-0.134167, 51.510239], 0.5, 64);
+  loading: boolean =  true;
+  searchResults;
+  persons = 1;
 
   popupHtml = `<strong>Loading</strong>`;
 
-  constructor(private http:HttpClient) {
+  constructor(private api: APIService) {
     this.mapbox.accessToken = environment.mapBoxToken;
   }
 
@@ -42,18 +41,16 @@ export class MapService {
   //https://api.tfl.gov.uk/BikePoint?app_id=2222&app_key=abcd 10”
 
   getBikePoint(bikePoint, coordinates) {
-    this.http.get<any>(`https://api.tfl.gov.uk/bikepoint/${bikePoint.id}?app_id=db79ada0&app_key=3a32a597715d22e21e5ca3d99c989e6c`).subscribe(
+    this.api.GetBikePoint(bikePoint.id).then(
       data => {
-        bikePoint.NbBikes = data.additionalProperties[6].value;
-        bikePoint.NbEmptyDocks = data.additionalProperties[7].value;
-        bikePoint.NbDocks = data.additionalProperties[8].value;
-        bikePoint.lastUpdate = moment.utc(data.additionalProperties[6].modified).startOf('hour').fromNow();
+        bikePoint.NbBikes = data.bikes;
         this.renderPopup(bikePoint);
         new mapboxgl.Popup()
           .setLngLat(coordinates)
           .setHTML(this.popupHtml)
           .addTo(this.map);
-      },
+      })
+    .catch (
       err => console.error(err)
     );
   }
@@ -66,7 +63,65 @@ export class MapService {
   }
 
   showSearchRadius() {
-    this.dataSearchRadius = this.createGeoJSONCircle(this.userLocation || this.initialLocation, 0.5, 64);
+    const coor = this.userLocation || this.initialLocation;
+    const location = {lon:coor[0], lat: coor[1]};
+
+    //draw search radius
+    this.drawSearchRadius(coor);
+
+    //search
+    this.api.NearbyBikeStations(location).then(event => {
+      debugger;
+      this.loading = false;
+      const bikepoints:any = {
+        "type": "FeatureCollection",
+        "features": []
+      }
+      event.items.forEach((p) => {
+        bikepoints.features.push({
+          "type": "Feature",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [ p.location.lon, p.location.lat]
+          },
+          "properties": {
+            "id": p.id,
+            "name": p.name,
+            "bikes": p.bikes
+          }
+        })
+      });
+
+      if (this.map.getLayer('search-results')) {
+        this.map.removeLayer('search-results');
+      }
+      if (this.map.getSource('search')) {
+        this.map.removeSource('search');
+      }
+      this.map.addSource("search", {
+        type: "geojson",
+        data: bikepoints,
+      });
+      this.map.addLayer({
+        'id': 'search-results',
+        'type': 'circle',
+        'source': "search",
+        'paint': {
+          'circle-radius': [
+            "step", ["get", "bikes"],
+            4, 3, 8, 5, 10
+          ],
+          'circle-color': [
+            "step", ["get", "bikes"],
+            "#f55d5d", this.persons, "#389393"
+          ]
+        }
+      });
+    });
+  }
+
+  drawSearchRadius(location){
+    this.dataSearchRadius = this.createGeoJSONCircle(location, 0.5, 64);
     this.map.jumpTo({ 'center': this.userLocation, 'zoom': 14 });
     if (this.map.getLayer('polygon')) {
       this.map.removeLayer('polygon');
@@ -102,6 +157,10 @@ export class MapService {
       this.map.setLayoutProperty("cluster-count", 'visibility', 'visible');
       this.map.setLayoutProperty("unclustered-point", 'visibility', 'visible');
     }
+  }
+
+  setPersons(number){
+    this.persons = number;
   }
 
   createGeoJSONCircle(center, km, points = 64): any {
@@ -145,13 +204,14 @@ export class MapService {
     });
 
     this.map.on('load', () => {
+      this.map.addControl(new mapboxgl.ScaleControl());
       this.geolocate = new mapboxgl.GeolocateControl({
         positionOptions: {
           enableHighAccuracy: true
         },
         trackUserLocation: true
       });
-      this.map.addControl(this.geolocate);
+      this.map.addControl(this.geolocate, "top-left");
 
       this.map.addSource("bikes", {
         type: "geojson",
@@ -261,7 +321,7 @@ export class MapService {
         this.userLocation = [e.coords.longitude, e.coords.latitude];
       });
     });
-    this.map.addControl(new mapboxgl.NavigationControl());
+    this.map.addControl(new mapboxgl.NavigationControl(), "top-left");
 
     var customData = data;
 
