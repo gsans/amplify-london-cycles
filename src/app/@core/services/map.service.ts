@@ -35,7 +35,7 @@ export class MapService {
     this.popupHtml = `
       <strong>${bike.name}</strong>
       <div class="bike-point">
-        <span title="${bike.lastUpdate}">${bike.NbBikes}</span> bikes available.
+        <span title="${bike.NbBikes}">${bike.NbBikes}</span> bikes available.
       </div>
     `;
   }
@@ -44,7 +44,7 @@ export class MapService {
   getBikePoint(bikePoint, coordinates) {
     this.api.GetBikePoint(bikePoint.id).then(
       data => {
-        bikePoint.NbBikes = data.bikes;
+        bikePoint.NbBikes = data.bikes || "0";
         this.renderPopup(bikePoint);
         new mapboxgl.Popup()
           .setLngLat(coordinates)
@@ -61,11 +61,30 @@ export class MapService {
       center: this.initialLocation,
       zoom: this.initialZoom
     });
+    this.map.setCenter(this.initialLocation);
   }
 
   search() {
-    const coor = this.userLocation || this.initialLocation;
-    const location = {lon:coor[0], lat: coor[1]};
+    //clear current search if any
+    if (this.map.getLayer('search-results')) {
+      this.map.removeLayer('search-results');
+    }
+    if (this.map.getLayer('search-labels')) {
+      this.map.removeLayer('search-labels');
+    }
+    if (this.map.getSource('search')) {
+      this.map.removeSource('search');
+    }
+
+    const center = this.map.getCenter();
+    const location = { lon: center.lng, lat: center.lat};
+    const coor = [location.lon, location.lat];
+
+    //zoom and center
+    this.map.flyTo({
+      center: center,
+      zoom: this.initialZoom
+    });
 
     //draw search radius
     this.drawSearchRadius(coor);
@@ -92,13 +111,6 @@ export class MapService {
           }
         })
       });
-
-      if (this.map.getLayer('search-results')) {
-        this.map.removeLayer('search-results');
-      }
-      if (this.map.getSource('search')) {
-        this.map.removeSource('search');
-      }
       this.map.addSource("search", {
         type: "geojson",
         data: bikepoints,
@@ -108,14 +120,28 @@ export class MapService {
         'type': 'circle',
         'source': "search",
         'paint': {
-          'circle-radius': [
-            "step", ["get", "bikes"],
-            4, 3, 8, 5, 10
-          ],
+          'circle-radius': {
+            stops: [[8, 1], [11, 4], [14, 15]]
+          },
           'circle-color': [
             "step", ["get", "bikes"],
             "#f55d5d", this.persons, "#389393"
           ]
+        }
+      });
+      this.map.addLayer({
+        "id": "search-labels",
+        "type": "symbol",
+        "source": "search",
+        "layout": {
+          "text-field": "{bikes}",
+          "text-font": [
+            "DIN Offc Pro Medium",
+            "Arial Unicode MS Bold"
+          ],
+          "text-size": {
+            stops: [[8, 1], [11, 6], [14, 12]]
+          }
         }
       });
     });
@@ -123,7 +149,7 @@ export class MapService {
 
   drawSearchRadius(location){
     this.dataSearchRadius = this.createGeoJSONCircle(location, 0.5, 64);
-    this.map.jumpTo({ 'center': this.userLocation, 'zoom': 14 });
+    //this.map.jumpTo({ 'center': this.userLocation, 'zoom': 14 });
     if (this.map.getLayer('polygon')) {
       this.map.removeLayer('polygon');
     }
@@ -214,9 +240,9 @@ export class MapService {
 
       const ctrlSearch = new MapboxGLButtonControl({
         className: "search",
-        title: "Search bike",
+        title: "Find bikes here",
         eventHandler: this.search.bind(this),
-        caption: "Find nearby"
+        caption: "Find bikes here"
       });
       this.map.addControl(ctrlSearch, "top-right");
 
@@ -231,12 +257,12 @@ export class MapService {
 
       this.map.addSource("bikes", {
         type: "geojson",
-        data: "assets/bikes.geojson"
+        data: data
       });
 
       this.map.addSource("bikes-cluster", {
         type: "geojson",
-        data: "assets/bikes.geojson",
+        data: data,
         cluster: true,
         clusterMaxZoom: 14, // Max zoom to cluster points on
         clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
@@ -295,7 +321,9 @@ export class MapService {
         filter: ["!", ["has", "point_count"]],
         paint: {
           "circle-color": "#11b4da",
-          "circle-radius": 4,
+          "circle-radius": {
+            stops: [[8, 1], [11, 4], [14, 15]]
+          },
           "circle-stroke-width": 1,
           "circle-stroke-color": "#fff"
         }
