@@ -5,6 +5,7 @@ import * as MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import data from "../../../assets/data.js";
 import * as moment from 'moment';
 import { APIService } from '../../API.service';
+import { MapboxGLButtonControl } from './mapbox-control';
 
 @Injectable({
   providedIn: "root"
@@ -62,7 +63,7 @@ export class MapService {
     });
   }
 
-  showSearchRadius() {
+  search() {
     const coor = this.userLocation || this.initialLocation;
     const location = {lon:coor[0], lat: coor[1]};
 
@@ -204,6 +205,21 @@ export class MapService {
     });
 
     this.map.on('load', () => {
+      const ctrlReset = new MapboxGLButtonControl({
+        className: "reset",
+        title: "Reset Location",
+        eventHandler: this.flyToStart.bind(this)
+      });
+      this.map.addControl(ctrlReset, "top-left");
+
+      const ctrlSearch = new MapboxGLButtonControl({
+        className: "search",
+        title: "Search bike",
+        eventHandler: this.search.bind(this),
+        caption: "Find nearby"
+      });
+      this.map.addControl(ctrlSearch, "top-right");
+
       this.map.addControl(new mapboxgl.ScaleControl());
       this.geolocate = new mapboxgl.GeolocateControl({
         positionOptions: {

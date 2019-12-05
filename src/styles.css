@@ -3,3 +3,47 @@ body {
 }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+button.mapboxgl-ctrl-icon.reset {
+  background-repeat: no-repeat;
+  background-position: center;
+  pointer-events: auto;
+  background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"%3E%3Cpath d="M0 0h24v24H0z" fill="none"/%3E%3Cpath d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm-7 7H3v4c0 1.1.9 2 2 2h4v-2H5v-4zM5 5h4V3H5c-1.1 0-2 .9-2 2v4h2V5zm14-2h-4v2h4v4h2V5c0-1.1-.9-2-2-2zm0 16h-4v2h4c1.1 0 2-.9 2-2v-4h-2v4z"/%3E%3C/svg%3E');
+}
+
+button.mapboxgl-ctrl-icon.search {
+  background-repeat: no-repeat;
+  background-position: center;
+  pointer-events: auto;
+  background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"%3E%3Cpath d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/%3E%3Cpath d="M0 0h24v24H0z" fill="none"/%3E%3C/svg%3E');
+  width: 125px;
+  background-position: left;
+  background-position-x: 6px;
+  padding-left: 10px;
+  padding-right: 10px;
+  text-align: right;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.mapboxgl-popup-content {
+  font-size: 15px;
+  padding: 10px 15px;
+}
+.mapboxgl-popup-close-button {
+  position: relative;
+}
+.mapboxgl-popup-content button.mapboxgl-popup-close-button {
+  margin: -6px -11px 0px 10px;
+  float: right;
+  font-size: 25px;
+}
+.bike-point {
+  margin-top: 10px;
+}
+
+.bike-point span {
+  font-size: 2em;
+  color: darkgrey;
+}

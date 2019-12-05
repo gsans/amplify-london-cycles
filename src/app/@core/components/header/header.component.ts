@@ -23,11 +23,7 @@ export class HeaderComponent implements OnInit {
     this.map.setPersons(e.value);
   }
 
-  centerMap() {
-    this.map.flyToStart();
-  }
-
   showSearchRadius() {
-    this.map.showSearchRadius();
+    this.map.search();
   }
 }
