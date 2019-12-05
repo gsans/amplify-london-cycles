@@ -51,3 +51,20 @@ button.mapboxgl-ctrl-icon.search {
   width: 75%;
   min-width: 260px;
 }
+
+.mapboxgl-ctrl-geocoder--input{
+  height: 40px;
+}
+.mapboxgl-ctrl-geocoder--icon-search {
+  top: 9px;
+}
+@media screen and (min-width: 640px) {
+  .mapboxgl-ctrl-geocoder--icon-search {
+    top: 11px;
+  }
+}
+
+.mapboxgl-ctrl button {
+  width: 40px;
+  height: 40px;
+}
