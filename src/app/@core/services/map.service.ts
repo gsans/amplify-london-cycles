@@ -42,6 +42,10 @@ export class MapService {
   //https://api.tfl.gov.uk/BikePoint?app_id=2222&app_key=abcd 10”
 
   getBikePoint(bikePoint, coordinates) {
+    this.map.flyTo({
+      center: coordinates,
+      speed: 0.25
+    });
     this.api.GetBikePoint(bikePoint.id).then(
       data => {
         bikePoint.NbBikes = data.bikes || "0";

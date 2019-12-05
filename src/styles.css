@@ -46,3 +46,8 @@ button.mapboxgl-ctrl-icon.search {
   font-size: 2em;
   color: darkgrey;
 }
+
+.mapboxgl-ctrl-geocoder{
+  width: 75%;
+  min-width: 325px;
+}
