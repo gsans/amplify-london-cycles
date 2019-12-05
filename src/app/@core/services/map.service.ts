@@ -18,7 +18,7 @@ export class MapService {
   initialLocation: mapboxgl.LngLatLike = [-0.134167, 51.510239];
   userLocation: mapboxgl.LngLatLike;
   dataSearchRadius: any = this.createGeoJSONCircle([-0.134167, 51.510239], 0.5, 64);
-  loading: boolean =  true;
+  loading: boolean = true;
   searchResults;
   persons = 1;
 
@@ -50,14 +50,14 @@ export class MapService {
       data => {
         bikePoint.NbBikes = data.bikes || "0";
         this.renderPopup(bikePoint);
-        new mapboxgl.Popup()
+        new mapboxgl.Popup({ offset: [0, -18] })
           .setLngLat(coordinates)
           .setHTML(this.popupHtml)
           .addTo(this.map);
       })
-    .catch (
-      err => console.error(err)
-    );
+      .catch(
+        err => console.error(err)
+      );
   }
 
   flyToStart() {
@@ -81,7 +81,7 @@ export class MapService {
     }
 
     const center = this.map.getCenter();
-    const location = { lon: center.lng, lat: center.lat};
+    const location = { lon: center.lng, lat: center.lat };
     const coor = [location.lon, location.lat];
 
     //zoom and center
@@ -97,7 +97,7 @@ export class MapService {
     this.api.NearbyBikeStations(location).then(event => {
       debugger;
       this.loading = false;
-      const bikepoints:any = {
+      const bikepoints: any = {
         "type": "FeatureCollection",
         "features": []
       }
@@ -106,7 +106,7 @@ export class MapService {
           "type": "Feature",
           "geometry": {
             "type": "Point",
-            "coordinates": [ p.location.lon, p.location.lat]
+            "coordinates": [p.location.lon, p.location.lat]
           },
           "properties": {
             "id": p.id,
@@ -148,17 +148,30 @@ export class MapService {
           }
         }
       });
+      if (this.map.getLayer('polygon')) {
+        this.map.removeLayer('polygon');
+      }
+      if (this.map.getLayer('polygon-text')) {
+        this.map.removeLayer('polygon-text');
+      }
+      if (this.map.getSource('polygon')) {
+        this.map.removeSource('polygon');
+      }
     });
   }
 
-  drawSearchRadius(location){
+  drawSearchRadius(location) {
     this.dataSearchRadius = this.createGeoJSONCircle(location, 0.5, 64);
-    //this.map.jumpTo({ 'center': this.userLocation, 'zoom': 14 });
+    this.map.jumpTo({ 'center': this.userLocation, 'zoom': 14 });
     if (this.map.getLayer('polygon')) {
       this.map.removeLayer('polygon');
     }
+    if (this.map.getLayer('polygon-text')) {
+      this.map.removeLayer('polygon-text');
+    }
     if (this.map.getSource('polygon')) {
       this.map.removeSource('polygon');
+    }
       this.map.addSource("polygon", {
         type: 'geojson',
         data: this.dataSearchRadius
@@ -173,7 +186,17 @@ export class MapService {
           "fill-opacity": 0.2
         }
       });
-    }
+      this.map.addLayer({
+        id: "polygon-text",
+        type: "symbol",
+        source: "polygon",
+        layout: {
+          "text-field": "Searching...",
+          "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+          "text-size": 18
+        }
+      });
+    
   }
 
   toggleSources(active) {
@@ -190,7 +213,7 @@ export class MapService {
     }
   }
 
-  setPersons(number){
+  setPersons(number) {
     this.persons = number;
   }
 
@@ -318,25 +341,53 @@ export class MapService {
           "circle-stroke-color": "#fff"
         }
       });
-      this.map.addLayer({
-        id: "point",
-        type: "circle",
-        source: "bikes",
-        filter: ["!", ["has", "point_count"]],
-        paint: {
-          "circle-color": "#11b4da",
-          "circle-radius": {
-            stops: [[8, 1], [11, 4], [14, 15]]
-          },
-          "circle-stroke-width": 1,
-          "circle-stroke-color": "#fff"
-        }
-      });
+
+      // this.map.loadImage('/assets/bike.png', (error, image) => {
+      //   if (error) throw error;
+      //   this.map.addImage('bike', image);
+        this.map.addLayer({
+          id: "point",
+          type: "circle",
+          source: "bikes",
+          filter: ["!", ["has", "point_count"]],
+          paint: {
+            "circle-color": "rgba(190, 190, 190, 0.62)",
+            "circle-radius": {
+              stops: [[8, 1], [11, 4], [14, 15]]
+            },
+            "circle-stroke-width": 1,
+            "circle-stroke-color": "transparent"
+          }
+        });
+        // this.map.addLayer({
+        //   "id": "points",
+        //   "type": "symbol",
+        //   "source": "bikes",
+        //   "layout": {
+        //     "icon-image": "bicycle-11",
+        //     "icon-size": 1
+        //     // "icon-size": {
+        //     //   stops: [[12, 0.01], [13, 0.05 ]]
+        //     // }
+        //   }
+        //});
+      //});
 
       this.map.addSource("polygon", {
         type: 'geojson',
         data: this.dataSearchRadius
       });
+
+      /*       data.features.forEach((marker) => {
+              // create a HTML element for each feature
+              var el = document.createElement('div');
+              el.className = 'marker';
+            
+              // make a marker for each feature and add to the map
+              new mapboxgl.Marker(el)
+                .setLngLat(marker.geometry.coordinates)
+                .addTo(this.map);
+            }); */
 
       // inspect a cluster on click
       this.map.on('click', 'clusters', function (e) {
@@ -402,7 +453,7 @@ export class MapService {
       const g: any = e.features[0].geometry;
       var coordinates = g.coordinates.slice();
       var description = e.features[0].properties.description;
-       
+
       while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
       }
@@ -422,7 +473,7 @@ export class MapService {
       const g: any = e.features[0].geometry;
       var coordinates = g.coordinates.slice();
       var description = e.features[0].properties.description;
-       
+
       while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
       }

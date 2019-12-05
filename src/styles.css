@@ -64,7 +64,15 @@ button.mapboxgl-ctrl-icon.search {
   }
 }
 
-.mapboxgl-ctrl button {
+.mapboxgl-ctrl:not(.mapboxgl-ctrl-geocoder) button {
   width: 40px;
   height: 40px;
+}
+
+.marker {
+  background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="481.8" height="481.8"%3E%3Cpath d="M393 207c-10 0-20 1-29 5h-2l-32-58v-25h38a13 13 0 000-27h-51a13 13 0 00-13 17v26H187l-9-22h27a13 13 0 000-25h-95a13 13 0 000 25h40l8 19-38 70h-2a89 89 0 1058 99l1-3h37l1 1a31 31 0 0051-31v-1l51-93 23 41-2 1a89 89 0 1055-19zm-263 40l2 2c9 9 15 19 18 31l1 3h-41l20-36zm20 64a63 63 0 11-46-77l4 1-30 54-1 1a11 11 0 000 2 11 11 0 00-1 3v1a18 18 0 000 2 11 11 0 001 3l1 1a9 9 0 001 2l1 1a19 19 0 002 1l1 1a10 10 0 003 1 11 11 0 002 0h63l-1 3zm63-44c-4 4-6 9-7 14v2h-29l-1-2c-3-22-15-41-32-55l-2-1 29-53 43 93-1 2zm34-10h-2l-7-1-1-1-38-85h96l-48 87zm146 102a63 63 0 01-43-110l2-2 30 55a13 13 0 1022-13l-30-54 3-1a63 63 0 1116 125z"/%3E%3C/svg%3E');
+  background-size: cover;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
 }
