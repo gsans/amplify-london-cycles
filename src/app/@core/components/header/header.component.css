@@ -3,7 +3,7 @@
   height: 50px;
   justify-content: center;
   align-items: center;
-  margin: 10px;
+  padding: 0 10px;
 }
 .logo {
   margin-left: auto;
