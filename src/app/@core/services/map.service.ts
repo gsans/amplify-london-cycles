@@ -473,7 +473,6 @@ export class MapService {
   }
 
   addMouseEventsToLayer(layer) {
-    debugger;
     if(this.map.getLayer(layer)){
       this.map.on('click', layer, (e) => {
         const g: any = e.features[0].geometry;
