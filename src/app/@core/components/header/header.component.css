@@ -3,6 +3,10 @@
   height: 50px;
   justify-content: center;
   align-items: center;
+  margin: 10px;
+}
+.logo {
+  margin-left: auto;
 }
 .logo, .title {
   display: inline;
@@ -10,18 +14,17 @@
   margin-top: 4px;
 }
 .logo img {
-  height: 20px;
+  height: 14px;
   margin: 4px;
   margin-left: 15px;
 }
 .title {
   font-weight: bold;
   margin: 4px;
+  font-size: 1.5em;
 }
-.toolbar {
-  align-self: center;
-  padding-left: 10px;
-}
-.toolbar button, .toolbar mat-slide-toggle {
-  margin-left: 10px;
+.by {
+  font-style: italic;
+  font-size: 10px;
+  margin-left: 2px;
 }
