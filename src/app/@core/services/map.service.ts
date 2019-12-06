@@ -132,7 +132,7 @@ export class MapService {
           },
           'circle-color': [
             "step", ["get", "bikes"],
-            "#f55d5d", this.persons, "#389393"
+            "#f55d5d", this.persons, "#ffb501"
           ]
         }
       });
@@ -299,7 +299,7 @@ export class MapService {
   buildMap() {
     this.map = new mapboxgl.Map({
       container: "map",
-      style: "mapbox://styles/mapbox/streets-v11",
+      style: "mapbox://styles/mapbox/light-v10",
       zoom: this.initialZoom,
       center: this.initialLocation
     });
