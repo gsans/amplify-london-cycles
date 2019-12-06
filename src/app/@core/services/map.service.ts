@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { environment } from "@env/environment";
 import * as mapboxgl from "mapbox-gl";
 import * as MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
-import data from "../../../assets/data.js";
+//import data from "../../../assets/data.js";
 import * as moment from 'moment';
 import { APIService } from '../../API.service';
 import { MapboxGLButtonControl } from './mapbox-control';
@@ -21,6 +21,7 @@ export class MapService {
   loading: boolean = true;
   searchResults;
   persons = 1;
+  searching = false;
 
   popupHtml = `<strong>Loading</strong>`;
 
@@ -63,12 +64,15 @@ export class MapService {
   flyToStart() {
     this.map.flyTo({
       center: this.initialLocation,
-      zoom: this.initialZoom
+      zoom: this.initialZoom,
+      speed: 0.5
     });
-    this.map.setCenter(this.initialLocation);
+    //setTimeout(()=>this.map.setCenter(this.initialLocation), 1500);
   }
 
   search() {
+    if(this.searching) return;
+    this.searching = true;
     //clear current search if any
     if (this.map.getLayer('search-results')) {
       this.map.removeLayer('search-results');
@@ -95,7 +99,6 @@ export class MapService {
 
     //search
     this.api.NearbyBikeStations(location).then(event => {
-      debugger;
       this.loading = false;
       const bikepoints: any = {
         "type": "FeatureCollection",
@@ -111,7 +114,7 @@ export class MapService {
           "properties": {
             "id": p.id,
             "name": p.name,
-            "bikes": p.bikes
+            "bikes": p.bikes || Math.floor(Math.random() * 16)
           }
         })
       });
@@ -148,30 +151,33 @@ export class MapService {
           }
         }
       });
+      this.addMouseEventsToLayer('search-results');
       if (this.map.getLayer('polygon')) {
         this.map.removeLayer('polygon');
-      }
-      if (this.map.getLayer('polygon-text')) {
-        this.map.removeLayer('polygon-text');
       }
       if (this.map.getSource('polygon')) {
         this.map.removeSource('polygon');
       }
+      if (this.map.getLayer('searching-text')) {
+        this.map.removeLayer('searching-text');
+      }
+      if (this.map.getSource('searching')) {
+        this.map.removeSource('searching');
+      }
+      this.searching = false;
     });
   }
 
   drawSearchRadius(location) {
     this.dataSearchRadius = this.createGeoJSONCircle(location, 0.5, 64);
-    this.map.jumpTo({ 'center': this.userLocation, 'zoom': 14 });
+    this.map.jumpTo({ 'center': {lon: location[0],lat: location[1] }, 'zoom': 14 });
     if (this.map.getLayer('polygon')) {
       this.map.removeLayer('polygon');
-    }
-    if (this.map.getLayer('polygon-text')) {
-      this.map.removeLayer('polygon-text');
     }
     if (this.map.getSource('polygon')) {
       this.map.removeSource('polygon');
     }
+
       this.map.addSource("polygon", {
         type: 'geojson',
         data: this.dataSearchRadius
@@ -186,17 +192,36 @@ export class MapService {
           "fill-opacity": 0.2
         }
       });
+
+      if (this.map.getLayer('searching-text')) {
+        this.map.removeLayer('searching-text');
+      }
+      if (this.map.getSource('searching')) {
+        this.map.removeSource('searching');
+      }
+      this.map.addSource("searching", {
+        type: 'geojson',
+        data: ({
+          "type": "FeatureCollection",
+          "features": [{
+            "type": "Feature",
+            "geometry": {
+              "type": "Point",
+              "coordinates": location
+            }
+          }]
+        }) as any
+      });
       this.map.addLayer({
-        id: "polygon-text",
+        id: "searching-text",
         type: "symbol",
-        source: "polygon",
+        source: "searching",
         layout: {
           "text-field": "Searching...",
           "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
           "text-size": 18
         }
       });
-    
   }
 
   toggleSources(active) {
@@ -249,6 +274,28 @@ export class MapService {
     };
   };
 
+  toggleBikes() {
+    if (this.map.getLayer('point')) {
+      this.map.removeLayer('point');
+    } else {
+      this.map.addLayer({
+        id: "point",
+        type: "circle",
+        source: "bikes",
+        filter: ["!", ["has", "point_count"]],
+        paint: {
+          "circle-color": "rgba(190, 190, 190, 0.62)",
+          "circle-radius": {
+            stops: [[8, 1], [11, 4], [14, 15]]
+          },
+          "circle-stroke-width": 1,
+          "circle-stroke-color": "transparent"
+        }
+      });
+      this.addMouseEventsToLayer('point');
+    }
+  }
+
   buildMap() {
     this.map = new mapboxgl.Map({
       container: "map",
@@ -264,6 +311,13 @@ export class MapService {
         eventHandler: this.flyToStart.bind(this)
       });
       this.map.addControl(ctrlReset, "top-left");
+
+      const ctrlToggleBikes = new MapboxGLButtonControl({
+        className: "bikes",
+        title: "Toggle bikes",
+        eventHandler: this.toggleBikes.bind(this)
+      });
+      this.map.addControl(ctrlToggleBikes, "top-left");
 
       const ctrlSearch = new MapboxGLButtonControl({
         className: "search",
@@ -284,10 +338,12 @@ export class MapService {
 
       this.map.addSource("bikes", {
         type: "geojson",
-        data: data
-      });
+        data: "assets/bikes.geojson"
+        //data: "assets/bikes.geojson"
+      }); 
 
-      this.map.addSource("bikes-cluster", {
+      // Clustered sourcee/views
+/*       this.map.addSource("bikes-cluster", {
         type: "geojson",
         data: data,
         cluster: true,
@@ -327,7 +383,7 @@ export class MapService {
           "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
           "text-size": 12
         }
-      });
+      }); 
 
       this.map.addLayer({
         id: "unclustered-point",
@@ -341,37 +397,7 @@ export class MapService {
           "circle-stroke-color": "#fff"
         }
       });
-
-      // this.map.loadImage('/assets/bike.png', (error, image) => {
-      //   if (error) throw error;
-      //   this.map.addImage('bike', image);
-        this.map.addLayer({
-          id: "point",
-          type: "circle",
-          source: "bikes",
-          filter: ["!", ["has", "point_count"]],
-          paint: {
-            "circle-color": "rgba(190, 190, 190, 0.62)",
-            "circle-radius": {
-              stops: [[8, 1], [11, 4], [14, 15]]
-            },
-            "circle-stroke-width": 1,
-            "circle-stroke-color": "transparent"
-          }
-        });
-        // this.map.addLayer({
-        //   "id": "points",
-        //   "type": "symbol",
-        //   "source": "bikes",
-        //   "layout": {
-        //     "icon-image": "bicycle-11",
-        //     "icon-size": 1
-        //     // "icon-size": {
-        //     //   stops: [[12, 0.01], [13, 0.05 ]]
-        //     // }
-        //   }
-        //});
-      //});
+      */
 
       this.map.addSource("polygon", {
         type: 'geojson',
@@ -390,7 +416,7 @@ export class MapService {
             }); */
 
       // inspect a cluster on click
-      this.map.on('click', 'clusters', function (e) {
+/*       this.map.on('click', 'clusters', function (e) {
         var features = this.queryRenderedFeatures(e.point, { layers: ['clusters'] });
         var clusterId = features[0].properties.cluster_id;
         this.getSource('bikes-cluster').getClusterExpansionZoom(clusterId, function (err, zoom) {
@@ -402,9 +428,9 @@ export class MapService {
             zoom: zoom
           });
         }.bind(this));
-      });
+      }); */
 
-      this.map.on('mouseenter', 'clusters', () => {
+/*       this.map.on('mouseenter', 'clusters', () => {
         this.map.getCanvas().style.cursor = 'pointer';
       });
       this.map.on('mouseleave', 'clusters', () => {
@@ -412,7 +438,7 @@ export class MapService {
       });
       this.map.setLayoutProperty("clusters", 'visibility', 'none');
       this.map.setLayoutProperty("cluster-count", 'visibility', 'none');
-      this.map.setLayoutProperty("unclustered-point", 'visibility', 'none');
+      this.map.setLayoutProperty("unclustered-point", 'visibility', 'none'); */
       //this.map.toggleSources(false);
 
       // update user location
@@ -422,7 +448,7 @@ export class MapService {
     });
     this.map.addControl(new mapboxgl.NavigationControl(), "top-left");
 
-    var customData = data;
+/*     var customData = data;
 
     function forwardGeocoder(query) {
       var matchingFeatures = [];
@@ -435,57 +461,38 @@ export class MapService {
         }
       }
       return matchingFeatures;
-    }
+    } */
 
     this.map.addControl(new MapboxGeocoder({
       accessToken: this.mapbox.accessToken,
-      localGeocoder: forwardGeocoder,
+      //localGeocoder: forwardGeocoder,
       zoom: 14,
       placeholder: "Enter search",
       mapboxgl: this.mapbox
     }));
-
-    this.addPopupMouseEvents();
   }
 
-  addPopupMouseEvents() {
-    this.map.on('click', 'point', (e) => {
-      const g: any = e.features[0].geometry;
-      var coordinates = g.coordinates.slice();
-      var description = e.features[0].properties.description;
-
-      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-      }
-      this.getBikePoint(e.features[0].properties, coordinates);
-    });
-
-    this.map.on('mouseenter', 'point', () => {
-      this.map.getCanvas().style.cursor = 'pointer';
-    });
-
-    this.map.on('mouseleave', 'point', () => {
-      this.map.getCanvas().style.cursor = '';
-    });
-
-    //unclustered-point
-    this.map.on('click', 'unclustered-point', (e) => {
-      const g: any = e.features[0].geometry;
-      var coordinates = g.coordinates.slice();
-      var description = e.features[0].properties.description;
-
-      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-      }
-      this.getBikePoint(e.features[0].properties, coordinates);
-    });
-
-    this.map.on('mouseenter', 'unclustered-point', () => {
-      this.map.getCanvas().style.cursor = 'pointer';
-    });
-
-    this.map.on('mouseleave', 'unclustered-point', () => {
-      this.map.getCanvas().style.cursor = '';
-    });
+  addMouseEventsToLayer(layer) {
+    debugger;
+    if(this.map.getLayer(layer)){
+      this.map.on('click', layer, (e) => {
+        const g: any = e.features[0].geometry;
+        var coordinates = g.coordinates.slice();
+        var description = e.features[0].properties.description;
+  
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        }
+        this.getBikePoint(e.features[0].properties, coordinates);
+      });
+  
+      this.map.on('mouseenter', layer, () => {
+        this.map.getCanvas().style.cursor = 'pointer';
+      });
+  
+      this.map.on('mouseleave', layer, () => {
+        this.map.getCanvas().style.cursor = '';
+      });
+    }
   }
 }
