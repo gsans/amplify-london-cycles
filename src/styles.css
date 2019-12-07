@@ -94,6 +94,22 @@ button.mapboxgl-ctrl-icon.search {
   box-shadow: none;
   outline: none;
 }
+.mapboxgl-ctrl-group button:hover.mapboxgl-ctrl-icon.reset,
+.mapboxgl-ctrl-group button:hover.mapboxgl-ctrl-icon.bikes,
+.mapboxgl-ctrl-group button:hover.mapboxgl-ctrl-icon.mapboxgl-ctrl-geolocate,
+.mapboxgl-ctrl-group button:hover.mapboxgl-ctrl-icon.search
+{
+  border-radius: 25px;
+}
+.mapboxgl-ctrl-group button:hover.mapboxgl-ctrl-icon.mapboxgl-ctrl-zoom-in {
+  border-radius: 25px 25px 0 0;
+}
+.mapboxgl-ctrl-group button:hover.mapboxgl-ctrl-icon.mapboxgl-ctrl-zoom-out {
+  border-radius: 0 0 0 0;
+}
+.mapboxgl-ctrl-group button:hover.mapboxgl-ctrl-icon.mapboxgl-ctrl-compass {
+  border-radius: 0 0 25px 25px;
+}
 .mapboxgl-ctrl-group {
   border-radius: 25px;
 }
@@ -106,15 +122,15 @@ button.mapboxgl-ctrl-icon.search {
 .twitter {
   z-index: 999;
   position: fixed;
-  bottom: 16px;
-  right: 5px;
+  bottom: 36px;
+  right: 10px;
   overflow: hidden;
 }
 
 @media screen and (min-width: 640px) {
   .twitter {
-    bottom: 16px;
-    right: 5px;
+    bottom: 25px;
+    right: 10px;
   }
 }
 

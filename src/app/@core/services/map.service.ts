@@ -365,6 +365,7 @@ export class MapService {
     if (this.map.getLayer('point')) {
       this.map.removeLayer('point');
     } else {
+      const overlay = this.map.getLayer("search-results")? "search-results":undefined;
       this.map.addLayer({
         id: "point",
         type: "circle",
@@ -378,7 +379,7 @@ export class MapService {
           "circle-stroke-width": 1,
           "circle-stroke-color": "transparent"
         }
-      });
+      }, overlay);
       this.addMouseEventsToLayer('point');
     }
   }
