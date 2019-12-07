@@ -1,9 +1,14 @@
 body {
   margin: 0px;
 }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: "Amazon Ember", "Helvetica", "sans-serif";
+}
 
 button.mapboxgl-ctrl-icon.reset {
   background-repeat: no-repeat;
@@ -19,7 +24,6 @@ button.mapboxgl-ctrl-icon.bikes {
   background-size: 30px 30px;
   background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 481.8 481.8"%3E%3Cpath fill="rgba(51,51,51,1)" d="M393 207c-10 0-20 1-29 5h-2l-32-58v-25h38a13 13 0 000-27h-51a13 13 0 00-13 17v26H187l-9-22h27a13 13 0 000-25h-95a13 13 0 000 25h40l8 19-38 70h-2a89 89 0 1058 99l1-3h37l1 1a31 31 0 0051-31v-1l51-93 23 41-2 1a89 89 0 1055-19zm-263 40l2 2c9 9 15 19 18 31l1 3h-41l20-36zm20 64a63 63 0 11-46-77l4 1-30 54-1 1a11 11 0 000 2 11 11 0 00-1 3v1a18 18 0 000 2 11 11 0 001 3l1 1a9 9 0 001 2l1 1a19 19 0 002 1l1 1a10 10 0 003 1 11 11 0 002 0h63l-1 3zm63-44c-4 4-6 9-7 14v2h-29l-1-2c-3-22-15-41-32-55l-2-1 29-53 43 93-1 2zm34-10h-2l-7-1-1-1-38-85h96l-48 87zm146 102a63 63 0 01-43-110l2-2 30 55a13 13 0 1022-13l-30-54 3-1a63 63 0 1116 125z"/%3E%3C/svg%3E');
 }
-
 
 button.mapboxgl-ctrl-icon.search {
   background-repeat: no-repeat;
@@ -58,7 +62,7 @@ button.mapboxgl-ctrl-icon.search {
   color: darkgrey;
 }
 
-.mapboxgl-ctrl-geocoder{
+.mapboxgl-ctrl-geocoder {
   width: 75%;
   min-width: 260px;
   -moz-box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
@@ -66,7 +70,7 @@ button.mapboxgl-ctrl-icon.search {
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
 }
 
-.mapboxgl-ctrl-geocoder--input{
+.mapboxgl-ctrl-geocoder--input {
   height: 40px;
 }
 .mapboxgl-ctrl-geocoder--icon-search {
@@ -90,15 +94,15 @@ button.mapboxgl-ctrl-icon.search {
   height: 24px;
   cursor: pointer;
 }
-.mapboxgl-ctrl-group > button:focus, .mapboxgl-ctrl-geocoder--button {
+.mapboxgl-ctrl-group > button:focus,
+.mapboxgl-ctrl-geocoder--button {
   box-shadow: none;
   outline: none;
 }
 .mapboxgl-ctrl-group button:hover.mapboxgl-ctrl-icon.reset,
 .mapboxgl-ctrl-group button:hover.mapboxgl-ctrl-icon.bikes,
 .mapboxgl-ctrl-group button:hover.mapboxgl-ctrl-icon.mapboxgl-ctrl-geolocate,
-.mapboxgl-ctrl-group button:hover.mapboxgl-ctrl-icon.search
-{
+.mapboxgl-ctrl-group button:hover.mapboxgl-ctrl-icon.search {
   border-radius: 25px;
 }
 .mapboxgl-ctrl-group button:hover.mapboxgl-ctrl-icon.mapboxgl-ctrl-zoom-in {
@@ -110,7 +114,8 @@ button.mapboxgl-ctrl-icon.search {
 .mapboxgl-ctrl-group button:hover.mapboxgl-ctrl-icon.mapboxgl-ctrl-compass {
   border-radius: 0 0 25px 25px;
 }
-.mapboxgl-ctrl-group, .mapboxgl-ctrl-geocoder {
+.mapboxgl-ctrl-group,
+.mapboxgl-ctrl-geocoder {
   border-radius: 25px;
 }
 @media screen and (min-width: 640px) {
@@ -135,28 +140,90 @@ button.mapboxgl-ctrl-icon.search {
 }
 
 .twitter:after {
-  content:'';
+  content: "";
   opacity: 0.8;
-  top:0;
-  transform:translateX(100%);
-	width:100%;
-	height:220px;
-	position: absolute;
-	z-index:1001;
-  animation: 
-   slide1 1s 10s 1,
-   slide2 1s 20s 1,
-   slide3 1s 30s 1,
-   slide4 1s 40s 1;
-  background: -moz-linear-gradient(left, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 50%, rgba(128,186,232,0) 99%, rgba(125,185,232,0) 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(255,255,255,0)), color-stop(50%,rgba(255,255,255,0.8)), color-stop(99%,rgba(128,186,232,0)), color-stop(100%,rgba(125,185,232,0))); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(left, rgba(255,255,255,0) 0%,rgba(255,255,255,0.8) 50%,rgba(128,186,232,0) 99%,rgba(125,185,232,0) 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(left, rgba(255,255,255,0) 0%,rgba(255,255,255,0.8) 50%,rgba(128,186,232,0) 99%,rgba(125,185,232,0) 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(left, rgba(255,255,255,0) 0%,rgba(255,255,255,0.8) 50%,rgba(128,186,232,0) 99%,rgba(125,185,232,0) 100%); /* IE10+ */
-	background: linear-gradient(to right, rgba(255,255,255,0) 0%,rgba(255,255,255,0.8) 50%,rgba(128,186,232,0) 99%,rgba(125,185,232,0) 100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#007db9e8',GradientType=1 ); /* IE6-9 */
+  top: 0;
+  transform: translateX(100%);
+  width: 100%;
+  height: 220px;
+  position: absolute;
+  z-index: 1001;
+  animation: slide1 1s 10s 1, slide2 1s 20s 1, slide3 1s 30s 1, slide4 1s 40s 1;
+  background: -moz-linear-gradient(
+    left,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(128, 186, 232, 0) 99%,
+    rgba(125, 185, 232, 0) 100%
+  ); /* FF3.6+ */
+  background: -webkit-gradient(
+    linear,
+    left top,
+    right top,
+    color-stop(0%, rgba(255, 255, 255, 0)),
+    color-stop(50%, rgba(255, 255, 255, 0.8)),
+    color-stop(99%, rgba(128, 186, 232, 0)),
+    color-stop(100%, rgba(125, 185, 232, 0))
+  ); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(
+    left,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(128, 186, 232, 0) 99%,
+    rgba(125, 185, 232, 0) 100%
+  ); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(
+    left,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(128, 186, 232, 0) 99%,
+    rgba(125, 185, 232, 0) 100%
+  ); /* Opera 11.10+ */
+  background: -ms-linear-gradient(
+    left,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(128, 186, 232, 0) 99%,
+    rgba(125, 185, 232, 0) 100%
+  ); /* IE10+ */
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(128, 186, 232, 0) 99%,
+    rgba(125, 185, 232, 0) 100%
+  ); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#007db9e8',GradientType=1 ); /* IE6-9 */
 }
-@keyframes slide1 {from {transform:translateX(-100%);}to {transform:translateX(100%);}}
-@keyframes slide2 {from {transform:translateX(-100%);}to {transform:translateX(100%);}}
-@keyframes slide3 {from {transform:translateX(-100%);}to {transform:translateX(100%);}}
-@keyframes slide4 {from {transform:translateX(-100%);}to {transform:translateX(100%);}}
+@keyframes slide1 {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+@keyframes slide2 {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+@keyframes slide3 {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+@keyframes slide4 {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
