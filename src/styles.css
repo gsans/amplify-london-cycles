@@ -110,7 +110,7 @@ button.mapboxgl-ctrl-icon.search {
 .mapboxgl-ctrl-group button:hover.mapboxgl-ctrl-icon.mapboxgl-ctrl-compass {
   border-radius: 0 0 25px 25px;
 }
-.mapboxgl-ctrl-group {
+.mapboxgl-ctrl-group, .mapboxgl-ctrl-geocoder {
   border-radius: 25px;
 }
 @media screen and (min-width: 640px) {
