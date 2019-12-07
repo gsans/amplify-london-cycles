@@ -19,9 +19,13 @@ export class MapService {
   userLocation: mapboxgl.LngLatLike;
   dataSearchRadius: any = this.createGeoJSONCircle([-0.134167, 51.510239], 0.5, 64);
   loading: boolean = true;
-  searchResults;
+  searchResults: any = {
+    "type": "FeatureCollection",
+    "features": []
+  };
   persons = 1;
   searching = false;
+  popups = [];
 
   popupHtml = `<strong>Loading</strong>`;
 
@@ -42,6 +46,10 @@ export class MapService {
   }
   //https://api.tfl.gov.uk/BikePoint?app_id=2222&app_key=abcd 10”
 
+  closeAllPopups() {
+    this.popups.forEach(popup => popup.remove());
+  }
+
   getBikePoint(bikePoint, coordinates) {
     this.map.flyTo({
       center: coordinates,
@@ -49,12 +57,15 @@ export class MapService {
     });
     this.api.GetBikePoint(bikePoint.id).then(
       data => {
+        bikePoint = { ...data }; 
         bikePoint.NbBikes = data.bikes || "0";
+        this.addPointToSearchResults(bikePoint);
         this.renderPopup(bikePoint);
-        new mapboxgl.Popup({ offset: [0, -18] })
+        this.closeAllPopups();
+        this.popups.push(new mapboxgl.Popup({ offset: [0, -18] })
           .setLngLat(coordinates)
           .setHTML(this.popupHtml)
-          .addTo(this.map);
+          .addTo(this.map));
       })
       .catch(
         err => console.error(err)
@@ -71,6 +82,7 @@ export class MapService {
   }
 
   search() {
+    this.closeAllPopups();
     if(this.searching) return;
     this.searching = true;
     //clear current search if any
@@ -100,12 +112,14 @@ export class MapService {
     //search
     this.api.NearbyBikeStations(location).then(event => {
       this.loading = false;
-      const bikepoints: any = {
+      this.searchResults = {
         "type": "FeatureCollection",
         "features": []
       }
       event.items.forEach((p) => {
-        bikepoints.features.push({
+        this.addPointToSearchResults(p);
+
+/*         this.searchResults.features.push({
           "type": "Feature",
           "geometry": {
             "type": "Point",
@@ -114,13 +128,13 @@ export class MapService {
           "properties": {
             "id": p.id,
             "name": p.name,
-            "bikes": p.bikes || Math.floor(Math.random() * 16)
+            "bikes": p.bikes //|| Math.floor(Math.random() * 16)
           }
         })
       });
       this.map.addSource("search", {
         type: "geojson",
-        data: bikepoints,
+        data: this.searchResults,
       });
       this.map.addLayer({
         'id': 'search-results',
@@ -152,8 +166,8 @@ export class MapService {
         },
         paint: {
           "text-color": "#333"
-        }
-      });
+        } */
+      }); 
       this.addMouseEventsToLayer('search-results');
       if (this.map.getLayer('polygon')) {
         this.map.removeLayer('polygon');
@@ -221,8 +235,11 @@ export class MapService {
         layout: {
           "text-field": "Searching...",
           "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
-          "text-size": 18,     
+          "text-size": {
+            stops: [[8, 1], [12, 6], [14, 18]]
+          }
         },
+        
         "paint": {
           "text-color": "#333",
         }   
@@ -279,7 +296,72 @@ export class MapService {
     };
   };
 
+  addPointToSearchResults(point) {
+    debugger;
+    this.searchResults.features.push({
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [point.location.lon, point.location.lat]
+      },
+      "properties": {
+        "id": point.id,
+        "name": point.name,
+        "bikes": point.bikes // || Math.floor(Math.random() * 16)
+      }
+    })
+    //clear current search if any
+    if (this.map.getLayer('search-results')) {
+      this.map.removeLayer('search-results');
+    }
+    if (this.map.getLayer('search-labels')) {
+      this.map.removeLayer('search-labels');
+    }
+    if (this.map.getSource('search')) {
+      this.map.removeSource('search');
+    }
+    this.map.addSource("search", {
+      type: "geojson",
+      data: this.searchResults,
+    });
+    this.map.addLayer({
+      'id': 'search-results',
+      'type': 'circle',
+      'source': "search",
+      'paint': {
+        'circle-radius': {
+          stops: [[8, 1], [11, 4], [14, 15]]
+        },
+        'circle-color': [
+          "step", ["get", "bikes"],
+          "#f5f5f5", 0, "#ffb501", this.persons, "#ffb501"
+        ],
+      }
+    });
+    this.map.addLayer({
+      "id": "search-labels",
+      "type": "symbol",
+      "source": "search",
+      "layout": {
+        "text-field": "{bikes}",
+        "text-font": [
+          "DIN Offc Pro Medium",
+          "Arial Unicode MS Bold"
+        ],
+        "text-size": {
+          stops: [[8, 1], [11, 6], [14, 12]]
+        }
+      },
+      paint: {
+        "text-color": "#333"
+      }
+    }); 
+  }
+
   toggleBikes() {
+    // close any popups
+    this.closeAllPopups();
+    
     if (this.map.getLayer('point')) {
       this.map.removeLayer('point');
     } else {
