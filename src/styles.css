@@ -89,3 +89,6 @@ button.mapboxgl-ctrl-icon.search {
   height: 24px;
   cursor: pointer;
 }
+.mapboxgl-ctrl-group > button:focus {
+  box-shadow: none;
+}
