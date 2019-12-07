@@ -297,7 +297,6 @@ export class MapService {
   };
 
   addPointToSearchResults(point) {
-    debugger;
     this.searchResults.features.push({
       "type": "Feature",
       "geometry": {
