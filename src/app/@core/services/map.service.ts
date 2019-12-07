@@ -146,7 +146,7 @@ export class MapService {
           },
           'circle-color': [
             "step", ["get", "bikes"],
-            "#f5f5f5", 0, "#ffb501", this.persons, "#ffb501"
+            "#f5f5f5", 0, "#ff8e03", this.persons, "#ff8e03"
           ],
         }
       });
@@ -334,7 +334,7 @@ export class MapService {
         },
         'circle-color': [
           "step", ["get", "bikes"],
-          "#f5f5f5", 0, "#ffb501", this.persons, "#ffb501"
+          "#f5f5f5", 0, "#ff8e03", this.persons, "#ff8e03"
         ],
       }
     });

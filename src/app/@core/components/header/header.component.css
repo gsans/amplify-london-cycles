@@ -13,18 +13,17 @@
 .logo, .title {
   display: inline;
   align-self: center;
-  margin-top: 4px;
 }
 .logo img {
-  height: 14px;
-  margin: 4px;
+  height: 26px;
+  margin-left: 5px;
 }
 .title {
   margin: 4px;
   font-size: 1.5em;
 }
 .title span {
-  color:#ffb501;
+  color:#ff8e03;
 }
 .by {
   font-style: italic;
