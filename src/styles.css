@@ -9,7 +9,7 @@ button.mapboxgl-ctrl-icon.reset {
   background-repeat: no-repeat;
   background-position: center;
   pointer-events: auto;
-  background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"%3E%3Cpath d="M0 0h24v24H0z" fill="none"/%3E%3Cpath d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm-7 7H3v4c0 1.1.9 2 2 2h4v-2H5v-4zM5 5h4V3H5c-1.1 0-2 .9-2 2v4h2V5zm14-2h-4v2h4v4h2V5c0-1.1-.9-2-2-2zm0 16h-4v2h4c1.1 0 2-.9 2-2v-4h-2v4z"/%3E%3C/svg%3E');
+  background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"%3E%3Cpath d="M0 0h24v24H0z" fill="none"/%3E%3Cpath fill="rgba(51,51,51,1)" d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm-7 7H3v4c0 1.1.9 2 2 2h4v-2H5v-4zM5 5h4V3H5c-1.1 0-2 .9-2 2v4h2V5zm14-2h-4v2h4v4h2V5c0-1.1-.9-2-2-2zm0 16h-4v2h4c1.1 0 2-.9 2-2v-4h-2v4z"/%3E%3C/svg%3E');
 }
 
 button.mapboxgl-ctrl-icon.bikes {
@@ -17,7 +17,7 @@ button.mapboxgl-ctrl-icon.bikes {
   background-position: center;
   pointer-events: auto;
   background-size: 30px 30px;
-  background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 481.8 481.8"%3E%3Cpath d="M393 207c-10 0-20 1-29 5h-2l-32-58v-25h38a13 13 0 000-27h-51a13 13 0 00-13 17v26H187l-9-22h27a13 13 0 000-25h-95a13 13 0 000 25h40l8 19-38 70h-2a89 89 0 1058 99l1-3h37l1 1a31 31 0 0051-31v-1l51-93 23 41-2 1a89 89 0 1055-19zm-263 40l2 2c9 9 15 19 18 31l1 3h-41l20-36zm20 64a63 63 0 11-46-77l4 1-30 54-1 1a11 11 0 000 2 11 11 0 00-1 3v1a18 18 0 000 2 11 11 0 001 3l1 1a9 9 0 001 2l1 1a19 19 0 002 1l1 1a10 10 0 003 1 11 11 0 002 0h63l-1 3zm63-44c-4 4-6 9-7 14v2h-29l-1-2c-3-22-15-41-32-55l-2-1 29-53 43 93-1 2zm34-10h-2l-7-1-1-1-38-85h96l-48 87zm146 102a63 63 0 01-43-110l2-2 30 55a13 13 0 1022-13l-30-54 3-1a63 63 0 1116 125z"/%3E%3C/svg%3E');
+  background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 481.8 481.8"%3E%3Cpath fill="rgba(51,51,51,1)" d="M393 207c-10 0-20 1-29 5h-2l-32-58v-25h38a13 13 0 000-27h-51a13 13 0 00-13 17v26H187l-9-22h27a13 13 0 000-25h-95a13 13 0 000 25h40l8 19-38 70h-2a89 89 0 1058 99l1-3h37l1 1a31 31 0 0051-31v-1l51-93 23 41-2 1a89 89 0 1055-19zm-263 40l2 2c9 9 15 19 18 31l1 3h-41l20-36zm20 64a63 63 0 11-46-77l4 1-30 54-1 1a11 11 0 000 2 11 11 0 00-1 3v1a18 18 0 000 2 11 11 0 001 3l1 1a9 9 0 001 2l1 1a19 19 0 002 1l1 1a10 10 0 003 1 11 11 0 002 0h63l-1 3zm63-44c-4 4-6 9-7 14v2h-29l-1-2c-3-22-15-41-32-55l-2-1 29-53 43 93-1 2zm34-10h-2l-7-1-1-1-38-85h96l-48 87zm146 102a63 63 0 01-43-110l2-2 30 55a13 13 0 1022-13l-30-54 3-1a63 63 0 1116 125z"/%3E%3C/svg%3E');
 }
 
 
@@ -60,6 +60,9 @@ button.mapboxgl-ctrl-icon.search {
 .mapboxgl-ctrl-geocoder{
   width: 75%;
   min-width: 260px;
+  -moz-box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
 }
 
 .mapboxgl-ctrl-geocoder--input{

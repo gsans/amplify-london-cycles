@@ -4,6 +4,7 @@
   justify-content: center;
   align-items: center;
   padding: 0 10px;
+  color: #333;
 }
 .logo {
   margin-left: auto;
@@ -18,9 +19,11 @@
   margin: 4px;
 }
 .title {
-  font-weight: bold;
   margin: 4px;
   font-size: 1.5em;
+}
+.title span {
+  color:#ffb501;
 }
 .by {
   font-style: italic;

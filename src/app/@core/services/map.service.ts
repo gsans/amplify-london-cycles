@@ -132,8 +132,8 @@ export class MapService {
           },
           'circle-color': [
             "step", ["get", "bikes"],
-            "#f55d5d", this.persons, "#ffb501"
-          ]
+            "#f5f5f5", 0, "#ffb501", this.persons, "#ffb501"
+          ],
         }
       });
       this.map.addLayer({
@@ -149,6 +149,9 @@ export class MapService {
           "text-size": {
             stops: [[8, 1], [11, 6], [14, 12]]
           }
+        },
+        paint: {
+          "text-color": "#333"
         }
       });
       this.addMouseEventsToLayer('search-results');
@@ -188,8 +191,7 @@ export class MapService {
         "source": "polygon",
         "layout": {},
         "paint": {
-          "fill-color": "#3f51b5",
-          "fill-opacity": 0.2
+          "fill-color": "rgba(202, 210, 211,0.3)",
         }
       });
 
@@ -219,8 +221,11 @@ export class MapService {
         layout: {
           "text-field": "Searching...",
           "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
-          "text-size": 18
-        }
+          "text-size": 18,     
+        },
+        "paint": {
+          "text-color": "#333",
+        }   
       });
   }
 
