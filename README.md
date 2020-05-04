@@ -1,6 +1,6 @@
 # LondonCycles. Find available rental Santander Cycles in London using open data via GraphQL with AWS Amplify and Angular
 
-![LondonCycles](https://i.imgur.com/tvwNkuA.gif "LondonCycles")
+![LondonCycles](https://i.imgur.com/tvwNkuA.gif "LondonCycles") ![Mobile](https://i.imgur.com/yUxzYBz.jpg "Mobile")
 
 This app shows how to integrate **Amazon Elasticsearch** with **AWS Amplify**, **AWS AppSync** to query Santander Cycles open data via **GraphQL** and create a client using **Mapbox** and **Angular** to run GraphQL distance-aware searches.
 
