@@ -34,7 +34,7 @@ query NearbyBikes {
 }
 ```
 
-*Important: enabling searches in your application will incur in costs. As part of the AWS Free Tier you are able to use searches for at least 30 days and up to 1GB data transfer with no cost.*
+>Important: enabling searches in your application will incur in costs. As part of the AWS Free Tier you are able to use searches for at least 30 days and up to 1GB data transfer with no cost.*
 
 ## Deploy with the AWS Amplify Console
 
