@@ -40,7 +40,7 @@ query NearbyBikes {
 
 The AWS Amplify Console provides hosting for fullstack serverless web apps. [Learn more](https://console.amplify.aws). Deploy this app to your AWS account with a single click:
 
-[![amplifybutton](https://oneclick.amplifyapp.com/button.svg)](https://console.aws.amazon.com/amplify/home#/deploy?repo=https://github.com/gsans/amplify-london-bikes)
+[![amplifybutton](https://oneclick.amplifyapp.com/button.svg)](https://console.aws.amazon.com/amplify/home#/deploy?repo=https://github.com/gsans/amplify-london-cycles)
 
 The Amplify Console will fork this repo in your GitHub account, and then build and deploy your backend and frontend in a single workflow. Your app will be available at `https://master.APPID.amplifyapp.com`.
 
@@ -56,7 +56,7 @@ The Amplify Console will fork this repo in your GitHub account, and then build a
 2. Install and configure the Amplify CLI
 
 ```
-  amplify init --app https://github.com/gsans/amplify-london-bikes
+  amplify init --app https://github.com/gsans/amplify-london-cycles
 ```
   
 >The init command clones the GitHub repo, initializes the CLI, creates a ‘sampledev’ environment in CLI, detects and adds categories, provisions the backend, pushes the changes to the cloud, and starts the app.
