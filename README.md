@@ -2,7 +2,7 @@
 
 <p float="left" >
   <img src="https://i.imgur.com/tvwNkuA.gif" height="350px" />
-  <img src="https://i.imgur.com/yUxzYBz.jpg" height="350px" />
+  <img src="https://i.imgur.com/t70U9hb.png" height="350px" />
 </p>
 
 This app shows how to integrate **Amazon Elasticsearch** with **AWS Amplify**, **AWS AppSync** to query Santander Cycles open data via **GraphQL** and create a client using **Mapbox** and **Angular** to run GraphQL distance-aware searches.
