@@ -1,3 +1,41 @@
+# LondonCycles. Find available rental Santander Cycles in London using open data via GraphQL with AWS Amplify and Angular
+
+![LondonCycles](https://i.imgur.com/tvwNkuA.gif "LondonCycles")
+
+This app shows how to integrate **Amazon Elasticsearch** with **AWS Amplify**, **AWS AppSync** to query Santander Cycles open data via **GraphQL** and create a client using **Mapbox** and **Angular** to run GraphQL distance-aware searches.
+
+Features included:
+- Display bike stations and allow querying a single bike station to see how many free bikes it has available at the moment using Santander Cycles open data via GraphQL.
+- Find the nearest bike stations around a given location and how many bikes are available for each at that time through a single GraphQL API.
+- Query using users current location (Geolocation Web API) or map coordinates.
+- Allow users to locate points of interest, addresses or places using a text based search integrating the Mapbox Geocoding API.
+- Relocate map to a default location, at Piccadilly Circus, for demo purposes.
+
+
+Distance-aware searches usage example:
+```
+query NearbyBikes {
+  nearbyBikeStations(location: { 
+    lat: 51.510239,
+    lon: -0.134167
+  }, m: 500, limit: 10) {
+    total
+    nextToken
+    items {
+      id
+      name
+      location {
+        lat
+        lon
+      }
+      bikes
+    }
+  }
+}
+```
+
+*Important: enabling searches in your application will incur in costs. As part of the AWS Free Tier you are able to use searches for at least 30 days and up to 1GB data transfer with no cost.*
+
 ## Deploy with the AWS Amplify Console
 
 The AWS Amplify Console provides hosting for fullstack serverless web apps. [Learn more](https://console.amplify.aws). Deploy this app to your AWS account with a single click:
