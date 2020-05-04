@@ -15,9 +15,9 @@ export class MapService {
   initialZoom = 14;
   initialLocation: mapboxgl.LngLatLike = [-0.134167, 51.510239];
   userLocation: mapboxgl.LngLatLike;
-  //dataSearchRange: any = this.createGeoJSONCircle([-0.134167, 51.510239], 0.5, 64);
   loading: boolean = true;
-  searchResults: any = {
+  searchResults;
+  emptyGeoJSON: any = {
     'type': 'FeatureCollection',
     'features': []
   };
@@ -34,7 +34,7 @@ export class MapService {
         <span title="${bikePoint.bikes}">${bikePoint.bikes || '0'}</span> bikes available.
       </div>`;
   }
-  //https://api.tfl.gov.uk/BikePoint?app_id=2222&app_key=abcd 10”
+  //https://api.tfl.gov.uk/BikePoint?app_id=2222&app_key=abcd
 
   closeAllPopups() {
     this.popups.forEach(popup => popup.remove());
@@ -49,7 +49,7 @@ export class MapService {
       data => {
         const bikePoint = { ...data };
         this.addToSearchResults(bikePoint);
-        this.renderSearchResults();
+        this.setSourceData('search', this.searchResults);
         this.closeAllPopups();
         this.popups.push(new mapboxgl.Popup({ offset: [0, -18] })
           .setLngLat(coordinates)
@@ -69,24 +69,14 @@ export class MapService {
     });
   }
 
-  removeIfExists(list) {
-    list.forEach(item => {
-      this.map.getLayer(item) && this.map.removeLayer(item);
-    })
-    list.forEach(item => {
-      this.map.getSource(item) && this.map.removeSource(item);
-    })
-  }
-
   findBikes() {
     this.closeAllPopups();
     if (this.searching) return;
     this.searching = true;
-    this.removeIfExists(['search-results', 'search-labels', 'search']);
+    this.clearSourceData(['search']);
 
     const center = this.map.getCenter();
     const mapCenter = { lon: center.lng, lat: center.lat };
-    //const mapCenterGeoJSON = [mapCenter.lon, mapCenter.lat];
 
     // zoom and center
     this.map.flyTo({ center, zoom: this.initialZoom });
@@ -100,59 +90,51 @@ export class MapService {
       this.searchResults = {
         'type': 'FeatureCollection',
         'features': []
-      }
+      };
       result.items.forEach(p => this.addToSearchResults(p));
-      this.renderSearchResults();
+      this.setSourceData('search', this.searchResults);
       this.addPopUpToLayer('search-results');
-      this.removeIfExists(['searching-range', 'searching-label']);
+      this.clearSourceData(['searching-range', 'searching-label']);
       this.searching = false;
     });
   }
 
   renderSearchRange(location) {
     this.map.jumpTo({ 'center': location, 'zoom': 14 });
-    const searchRange = this.createGeoJSONRange(location);
     
-    this.removeIfExists(['searching-range', 'searching-label']);
-    this.map.addSource('searching-range', {
-      type: 'geojson',
-      data: searchRange
-    });
-    this.map.addLayer({
-      'id': 'searching-range',
-      'type': 'fill',
-      'source': 'searching-range',
-      'paint': { 'fill-color': 'rgba(202, 210, 211,0.3)' }
-    });
+    // render search range
+    const searchRange = this.createGeoJSONRange(location);
+    this.setSourceData('searching-range', searchRange);
+    
+    // render searching... label
+    const searchRangeLocation = {
+      'type': 'FeatureCollection',
+      'features': [{
+        'type': 'Feature',
+        'geometry': {
+          'type': 'Point',
+          'coordinates': [location.lon, location.lat]
+        }
+      }]
+    };
+    this.setSourceData('searching-label', searchRangeLocation);
+  }
 
-    this.map.addSource('searching-label', {
-      type: 'geojson',
-      data: ({
+  setSourceData(source, data){
+    const s = this.map.getSource(source) as mapboxgl.GeoJSONSource;
+    s && s.setData(data);
+  }
+
+  clearSourceData(sources) {
+    sources.forEach(source => {
+      this.setSourceData(source, {
         'type': 'FeatureCollection',
-        'features': [{
-          'type': 'Feature',
-          'geometry': {
-            'type': 'Point',
-            'coordinates': [location.lon, location.lat]
-          }
-        }]
-      }) as any
-    });
-    this.map.addLayer({
-      id: 'searching-label',
-      type: 'symbol',
-      source: 'searching-label',
-      layout: {
-        'text-field': 'Searching...',
-        'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-        'text-size': ['interpolate', ['linear'], ['zoom'],
-          8, 1, 12, 6, 14, 18 ]
-      },
-      'paint': { 'text-color': '#333' }
+        'features': []
+      });
     });
   }
 
-  createGeoJSONRange(center, m = 500, points = 64): any {
+  createGeoJSONRange(center, m = 500, points = 60): any {
     let polygon = [];
     const rangeX = m / (111320 * Math.cos(center.lat * Math.PI / 180));
     const rangeY = m / 110574;
@@ -192,43 +174,6 @@ export class MapService {
       }
     });
   }
-  
-  renderSearchResults() {
-    this.removeIfExists(['search-results', 'search-labels', 'search']);
-    this.map.addSource('search', {
-      type: 'geojson',
-      data: this.searchResults,
-    });
-    this.map.addLayer({
-      'id': 'search-results',
-      'type': 'circle',
-      'source': 'search',
-      'paint': {
-        'circle-radius': [
-          'interpolate', ['linear'], ['zoom'],
-          8, 1, 11, 4, 14, 15
-        ],
-        'circle-color': '#FF9900',
-      }
-    });
-    this.map.addLayer({
-      'id': 'search-labels',
-      'type': 'symbol',
-      'source': 'search',
-      'layout': {
-        'text-field': '{bikes}',
-        'text-font': [
-          'DIN Offc Pro Medium',
-          'Arial Unicode MS Bold'
-        ],
-        'text-size': [
-          'interpolate', ['linear'], ['zoom'],
-          8, 1, 11, 6, 14, 12
-        ]
-      },
-      paint: { 'text-color': '#333' }
-    });
-  }
 
   toggleBikes() {
     this.closeAllPopups();
@@ -237,6 +182,7 @@ export class MapService {
       this.map.removeLayer('bike-stations');
       return;
     }
+    // avoid rendering over search results
     const overlay = this.map.getLayer('search-results') ? 'search-results' : undefined;
     this.map.addLayer({
       id: 'bike-stations',
@@ -268,8 +214,66 @@ export class MapService {
         data: 'assets/bikes.geojson'
       });
 
-      this.map.addSource('searching-range', {
-        type: 'geojson'
+      this.map.addSource('search', {
+        type: 'geojson',
+        data: this.emptyGeoJSON
+      });
+      this.map.addLayer({
+        'id': 'search-results',
+        'type': 'circle',
+        'source': 'search',
+        'paint': {
+          'circle-radius': [
+            'interpolate', ['linear'], ['zoom'],
+            8, 1, 11, 4, 14, 15
+          ],
+          'circle-color': '#FF9900',
+        }
+      });
+      this.map.addLayer({
+        'id': 'search-labels',
+        'type': 'symbol',
+        'source': 'search',
+        'layout': {
+          'text-field': '{bikes}',
+          'text-font': [
+            'DIN Offc Pro Medium',
+            'Arial Unicode MS Bold'
+          ],
+          'text-size': [
+            'interpolate', ['linear'], ['zoom'],
+            8, 1, 11, 6, 14, 12
+          ]
+        },
+        paint: { 'text-color': '#333' }
+      });
+
+      this.map.addSource('searching-range', { 
+        type: 'geojson',
+        data: this.emptyGeoJSON
+      });
+      this.map.addLayer({
+        'id': 'searching-range',
+        'type': 'fill',
+        'source': 'searching-range',
+        'paint': { 'fill-color': 'rgba(202, 210, 211,0.3)' }
+      });
+
+      this.map.addSource('searching-label', { 
+        type: 'geojson',
+        data: this.emptyGeoJSON
+      });
+      this.map.addLayer({
+        id: 'searching-label',
+        type: 'symbol',
+        source: 'searching-label',
+        layout: {
+          'text-field': 'Searching...',
+          'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+          'text-size': ['interpolate', ['linear'], ['zoom'],
+            8, 1, 12, 6, 14, 18 ]
+        },
+        'paint': { 'text-color': '#333' }
       });
     });
   }
@@ -302,7 +306,7 @@ export class MapService {
       trackUserLocation: true
     });
     this.map.addControl(this.geolocate, 'top-left');
-    this.geolocate.on('geolocate', (e) => {
+    this.geolocate.on('geolocate', e => {
       this.userLocation = [e.coords.longitude, e.coords.latitude];
     });
 
