@@ -34,13 +34,13 @@ query NearbyBikes {
 }
 ```
 
->Important: enabling searches in your application will incur in costs. As part of the AWS Free Tier you are able to use searches for at least 30 days and up to 1GB data transfer with no cost.*
-
 ## Deploy with the AWS Amplify Console
 
 The AWS Amplify Console provides hosting for fullstack serverless web apps. [Learn more](https://console.amplify.aws). Deploy this app to your AWS account with a single click:
 
 [![amplifybutton](https://oneclick.amplifyapp.com/button.svg)](https://console.aws.amazon.com/amplify/home#/deploy?repo=https://github.com/gsans/amplify-london-cycles)
+
+>**Important**: enabling searches in your application will incur in costs. As part of the AWS Free Tier you are able to use searches for at least 30 days and up to 1GB data transfer with no cost.*
 
 The Amplify Console will fork this repo in your GitHub account, and then build and deploy your backend and frontend in a single workflow. Your app will be available at `https://master.APPID.amplifyapp.com`.
 
